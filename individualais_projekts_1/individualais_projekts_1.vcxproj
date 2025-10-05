@@ -123,6 +123,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ff.cpp" />
+    <ClCompile Include="fiile.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="individualais_projekts_1.cpp" />
