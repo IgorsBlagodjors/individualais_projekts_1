@@ -1,0 +1,20 @@
+1001, Kafija Arabica 250g, 4.99, PartikasPreces
+1002, Teja zala, 3.49, PartikasPreces
+1003, Piens 1L, 1.19, PartikasPreces
+1004, T-kreks 'Rock', 19.99, Apgerbi
+1005, Dzins BlueFit, 49.99, Apgerbi
+1006, Jaka ziemas, 79.99, Apgerbi
+1007, Bluetooth austinjas, 59.90, Elektronika
+1008, Bezvadu pele, 24.50, Elektronika
+1009, Viedpulkstenis X2, 99.00, Elektronika
+1010, Gramata 'C++ pamati', 14.99, Gramatas
+1011, Romans 'Veja ena', 11.50, Gramatas
+1012, Enciklopedija, 25.00, Gramatas
+1013, Virtuves dvieli 3gab, 5.49, MajaiUnDarzam
+1014, Svece aromatiska, 3.99, MajaiUnDarzam
+1015, Podu komplekts 3gab, 29.99, MajaiUnDarzam
+1016, Sula apelsinu 1L, 2.39, PartikasPreces
+1017, Cepumi ar sokoladi, 2.99, PartikasPreces
+1018, Sporta sorti, 22.49, Apgerbi
+1019, USB ladejajs, 9.99, Elektronika
+1020, Ziedu pods, 7.50, MajaiUnDarzam

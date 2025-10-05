@@ -1,0 +1,5 @@
+1, Janis, Berzins, PartikasPreces
+2, Anna, Ozola, Apgerbi
+3, Martins, Kalnins, Elektronika
+4, Laura, Liepa, Gramatas
+5, Andris, Eglitis, MajaiUnDarzam

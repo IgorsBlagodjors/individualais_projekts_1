@@ -1,20 +1,52 @@
-﻿// individualais_projekts_1.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+﻿#include <iostream>
+#include "dataTypes.h"
+#include <iomanip>
+#include <fstream>
+#include "Function.h"
 
-#include <iostream>
+int main() {
+    Prece preces[20] = {
+          {1001, "Kafija Arabica 250g", 4.99, Kategorija::PartikasPreces},
+          {1002, "Teja zala", 3.49, Kategorija::PartikasPreces},
+          {1003, "Piens 1L", 1.19, Kategorija::PartikasPreces},
+          {1004, "T-kreks 'Rock'", 19.99, Kategorija::Apgerbi},
+          {1005, "Dzins BlueFit", 49.99, Kategorija::Apgerbi},
+          {1006, "Jaka ziemas", 79.99, Kategorija::Apgerbi},
+          {1007, "Bluetooth austinjas", 59.90, Kategorija::Elektronika},
+          {1008, "Bezvadu pele", 24.50, Kategorija::Elektronika},
+          {1009, "Viedpulkstenis X2", 99.00, Kategorija::Elektronika},
+          {1010, "Gramata 'C++ pamati'", 14.99, Kategorija::Gramatas},
+          {1011, "Romans 'Veja ena'", 11.50, Kategorija::Gramatas},
+          {1012, "Enciklopedija", 25.00, Kategorija::Gramatas},
+          {1013, "Virtuves dvieli 3gab", 5.49, Kategorija::MajaiUnDarzam},
+          {1014, "Svece aromatiska", 3.99, Kategorija::MajaiUnDarzam},
+          {1015, "Podu komplekts 3gab", 29.99, Kategorija::MajaiUnDarzam},
+          {1016, "Sula apelsinu 1L", 2.39, Kategorija::PartikasPreces},
+          {1017, "Cepumi ar sokoladi", 2.99, Kategorija::PartikasPreces},
+          {1018, "Sporta sorti", 22.49, Kategorija::Apgerbi},
+          {1019, "USB ladejajs", 9.99, Kategorija::Elektronika},
+          {1020, "Ziedu pods", 7.50, Kategorija::MajaiUnDarzam}
+    };
 
-int main()
-{
-    std::cout << "Hello World!\n";
+    Darbinieks darbinieki[5] = {
+        {1, "Janis", "Berzins", Kategorija::PartikasPreces},
+        {2, "Anna", "Ozola", Kategorija::Apgerbi},
+        {3, "Martins", "Kalnins", Kategorija::Elektronika},
+        {4, "Laura", "Liepa", Kategorija::Gramatas},
+        {5, "Andris", "Eglitis", Kategorija::MajaiUnDarzam}
+    };
+
+    Pirkums pirkumi[4] = {
+        {5001, preces[0], 2, "2025-09-30"},
+        {5002, preces[7], 1, "2025-10-01"},
+        {5003, preces[10], 3, "2025-10-02"},
+        {5004, preces[18], 5, "2025-10-03"}
+    };
+
+    savePreces(preces, 20, "preces.txt");
+    saveDarbinieki(darbinieki, 5, "darbinieki.txt");
+    savePirkumi(pirkumi, 4, "pirkumi.txt");
+
+    std::cout << "Dati ir saglabati failos!" << std::endl;
+    return 0;
 }
-
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
