@@ -18,16 +18,7 @@
     <ClCompile Include="individualais_projekts_1.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="File.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Function.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="fiile.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="ff.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
