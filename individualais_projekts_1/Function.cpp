@@ -1,15 +1,18 @@
 #include "Function.h"
 #include <fstream>
 #include <iomanip>
-
 void savePreces(const Prece* arr, int size, const std::string& filename) {
     std::ofstream file(filename);
     for (int i = 0; i < size; i++) {
-        file << arr[i].kods << ", "
-            << arr[i].nosaukums << ", "
-            << std::fixed << std::setprecision(2) << arr[i].cena << ", "
-            << kategorijaToString(arr[i].kategorija) << "\n";
+        file << "  {\n"
+            << "    \"kods\": " << arr[i].kods << ",\n"
+            << "    \"nosaukums\": \"" << arr[i].nosaukums << "\",\n"
+            << "    \"cena\": " << std::fixed << std::setprecision(2) << arr[i].cena << ",\n"
+            << "    \"kategorija\": \"" << kategorijaToString(arr[i].kategorija) << "\"\n"
+            << "  }";
+        file << "\n";
     }
+
 }
 
 void saveDarbinieki(const Darbinieks* arr, int size, const std::string& filename) {

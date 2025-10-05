@@ -1,7 +1,4 @@
-#include "data.h"
-int returnNumb2(int a) {
-    return 22;
-}
+#include "FakeData.h"
 Prece preces[20] = {
     {1001, "Kafija Arabica 250g", 4.99, Kategorija::PartikasPreces},
     {1002, "Teja zala", 3.49, Kategorija::PartikasPreces},
@@ -39,4 +36,4 @@ Pirkums pirkumi[4] = {
     {5003, preces[10], 3, "2025-10-02"},
     {5004, preces[18], 5, "2025-10-03"}
 };
-int number = 5;
+

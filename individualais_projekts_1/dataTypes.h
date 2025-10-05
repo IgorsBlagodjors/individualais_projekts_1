@@ -28,11 +28,9 @@ struct Pirkums {
     Prece prece;
     int daudzums;
     char datums[12];
-
     double getSumma() const { return prece.cena * daudzums; }
 };
 
-// inline чтобы не было повторного определения
 inline std::string kategorijaToString(Kategorija k) {
     switch (k) {
     case Kategorija::PartikasPreces: return "PartikasPreces";

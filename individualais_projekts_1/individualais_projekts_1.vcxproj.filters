@@ -21,12 +21,18 @@
     <ClCompile Include="Function.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="FakeData.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dataTypes.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Function.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="FakeData.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>

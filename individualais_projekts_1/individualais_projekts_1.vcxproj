@@ -123,11 +123,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FakeData.cpp" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="individualais_projekts_1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dataTypes.h" />
+    <ClInclude Include="FakeData.h" />
     <ClInclude Include="Function.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
