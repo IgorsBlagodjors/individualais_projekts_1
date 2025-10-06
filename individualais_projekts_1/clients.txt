@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "firstName": "Janis",
+    "lastName": "Ozols",
+    "card": "Silver"
+  },
+  {
+    "id": 2,
+    "firstName": "Anna",
+    "lastName": "Kalnina",
+    "card": "Gold"
+  },
+  {
+    "id": 3,
+    "firstName": "Marta",
+    "lastName": "Liepa",
+    "card": "Bronze"
+  },
+  {
+    "id": 4,
+    "firstName": "Andris",
+    "lastName": "Eglitis",
+    "card": "Silver"
+  }
+]

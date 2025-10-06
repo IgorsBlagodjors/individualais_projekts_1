@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "firstName": "Janis",
+    "lastName": "Berzins",
+    "department": "Food"
+  },
+  {
+    "id": 2,
+    "firstName": "Anna",
+    "lastName": "Ozola",
+    "department": "Clothes"
+  },
+  {
+    "id": 3,
+    "firstName": "Martins",
+    "lastName": "Kalnins",
+    "department": "Electronics"
+  },
+  {
+    "id": 4,
+    "firstName": "Laura",
+    "lastName": "Liepa",
+    "department": "Books"
+  },
+  {
+    "id": 5,
+    "firstName": "Andris",
+    "lastName": "Eglitis",
+    "department": "HomeAndGarden"
+  }
+]

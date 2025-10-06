@@ -24,6 +24,9 @@
     <ClCompile Include="FakeData.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dataTypes.h">
@@ -33,6 +36,9 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="FakeData.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>

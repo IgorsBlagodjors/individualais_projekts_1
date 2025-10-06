@@ -1,39 +1,45 @@
 #include "FakeData.h"
-Prece preces[20] = {
-    {1001, "Kafija Arabica 250g", 4.99, Kategorija::PartikasPreces},
-    {1002, "Teja zala", 3.49, Kategorija::PartikasPreces},
-    {1003, "Piens 1L", 1.19, Kategorija::PartikasPreces},
-    {1004, "T-kreks 'Rock'", 19.99, Kategorija::Apgerbi},
-    {1005, "Dzins BlueFit", 49.99, Kategorija::Apgerbi},
-    {1006, "Jaka ziemas", 79.99, Kategorija::Apgerbi},
-    {1007, "Bluetooth austinjas", 59.90, Kategorija::Elektronika},
-    {1008, "Bezvadu pele", 24.50, Kategorija::Elektronika},
-    {1009, "Viedpulkstenis X2", 99.00, Kategorija::Elektronika},
-    {1010, "Gramata 'C++ pamati'", 14.99, Kategorija::Gramatas},
-    {1011, "Romans 'Veja ena'", 11.50, Kategorija::Gramatas},
-    {1012, "Enciklopedija", 25.00, Kategorija::Gramatas},
-    {1013, "Virtuves dvieli 3gab", 5.49, Kategorija::MajaiUnDarzam},
-    {1014, "Svece aromatiska", 3.99, Kategorija::MajaiUnDarzam},
-    {1015, "Podu komplekts 3gab", 29.99, Kategorija::MajaiUnDarzam},
-    {1016, "Sula apelsinu 1L", 2.39, Kategorija::PartikasPreces},
-    {1017, "Cepumi ar sokoladi", 2.99, Kategorija::PartikasPreces},
-    {1018, "Sporta sorti", 22.49, Kategorija::Apgerbi},
-    {1019, "USB ladejajs", 9.99, Kategorija::Elektronika},
-    {1020, "Ziedu pods", 7.50, Kategorija::MajaiUnDarzam}
+Product products[20] = {
+    {1001, "Arabica Coffee 250g", 4.99, Category::Food},
+    {1002, "Green Tea", 3.49, Category::Food},
+    {1003, "Milk 1L", 1.19, Category::Food},
+    {1004, "T-shirt 'Rock'", 19.99, Category::Clothes},
+    {1005, "Jeans BlueFit", 49.99, Category::Clothes},
+    {1006, "Winter Jacket", 79.99, Category::Clothes},
+    {1007, "Bluetooth Headphones", 59.90, Category::Electronics},
+    {1008, "Wireless Mouse", 24.50, Category::Electronics},
+    {1009, "Smartwatch X2", 99.00, Category::Electronics},
+    {1010, "Book 'C++ Basics'", 14.99, Category::Books},
+    {1011, "Novel 'Wind Island'", 11.50, Category::Books},
+    {1012, "Encyclopedia", 25.00, Category::Books},
+    {1013, "Kitchen Towels 3pcs", 5.49, Category::HomeAndGarden},
+    {1014, "Aromatic Candle", 3.99, Category::HomeAndGarden},
+    {1015, "Pot Set 3pcs", 29.99, Category::HomeAndGarden},
+    {1016, "Orange Juice 1L", 2.39, Category::Food},
+    {1017, "Chocolate Cookies", 2.99, Category::Food},
+    {1018, "Sports Shorts", 22.49, Category::Clothes},
+    {1019, "USB Charger", 9.99, Category::Electronics},
+    {1020, "Flower Pot", 7.50, Category::HomeAndGarden}
 };
 
-Darbinieks darbinieki[5] = {
-    {1, "Janis", "Berzins", Kategorija::PartikasPreces},
-    {2, "Anna", "Ozola", Kategorija::Apgerbi},
-    {3, "Martins", "Kalnins", Kategorija::Elektronika},
-    {4, "Laura", "Liepa", Kategorija::Gramatas},
-    {5, "Andris", "Eglitis", Kategorija::MajaiUnDarzam}
+Client clients[4] = {
+    {1, "Janis", "Ozols", DiscountCardType::Silver},
+    {2, "Anna", "Kalnina", DiscountCardType::Gold},
+    {3, "Marta", "Liepa", DiscountCardType::Bronze},
+    {4, "Andris", "Eglitis", DiscountCardType::Silver}
 };
 
-Pirkums pirkumi[4] = {
-    {5001, preces[0], 2, "2025-09-30"},
-    {5002, preces[7], 1, "2025-10-01"},
-    {5003, preces[10], 3, "2025-10-02"},
-    {5004, preces[18], 5, "2025-10-03"}
+Employee employees[5] = {
+    {1, "Janis", "Berzins", Category::Food},
+    {2, "Anna", "Ozola", Category::Clothes},
+    {3, "Martins", "Kalnins", Category::Electronics},
+    {4, "Laura", "Liepa", Category::Books},
+    {5, "Andris", "Eglitis", Category::HomeAndGarden}
 };
 
+Purchase purchases[4] = {
+    {5001, clients[0], products[0], 2, "2025-09-30"},
+    {5002, clients[1], products[7], 1, "2025-10-01"},
+    {5003, clients[2], products[10], 3, "2025-10-02"},
+    {5004, clients[3], products[18], 5, "2025-10-03"}
+};
