@@ -1,3 +1,8 @@
 #pragma once
-void showMenu();
-void displayMenu();
+void showMainMenu();
+void showViewDataSubMenu();
+void showViewPartDataSubMenu();
+
+
+
+

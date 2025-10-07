@@ -1,6 +1,4 @@
 #pragma once
-#include <string>
-
 enum struct Category : int {
     Food,
     Clothes,
@@ -48,14 +46,14 @@ struct Product {
     int code;
     char name[50];
     double price;
+    int quantityInStock;
     Category category;
 };
-
-struct Client {
-    int id;
-    char firstName[20];
-    char lastName[30];
-    DiscountCardType card;
+struct DiscountCard {
+    int cardNumber;
+    char ownerFirstName[20];
+    char ownerLastName[30];
+    DiscountCardType type;
 };
 
 struct Employee {
@@ -65,17 +63,25 @@ struct Employee {
     Category department;
 };
 
-struct Purchase {
-    int code;
-    Client client;
+struct Receipt {
+    int receiptNumber;
+    DiscountCard card;
     Product product;
     int quantity;
     char date[12];
 
-    double getTotal() const {
-        double total = product.price * quantity;
-        double discount = total * cardToDiscount(client.card);
+    double getTotalNoDiscount() const {
+        return product.price * quantity;
+    }
+
+    double getTotalWithDiscount() const {
+        double total = getTotalNoDiscount();
+        double discount = total * cardToDiscount(card.type);
         return total - discount;
     }
-};
 
+    double getVAT(double rate = 0.21) const {
+        return getTotalWithDiscount() * rate;
+    }
+
+};

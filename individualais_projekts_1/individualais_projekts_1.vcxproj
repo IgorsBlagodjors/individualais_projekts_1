@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dataView.cpp" />
     <ClCompile Include="FakeData.cpp" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="individualais_projekts_1.cpp" />
@@ -130,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dataTypes.h" />
+    <ClInclude Include="dataView.h" />
     <ClInclude Include="FakeData.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="menu.h" />

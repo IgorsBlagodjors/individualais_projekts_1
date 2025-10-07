@@ -2,27 +2,44 @@
 #include "menu.h"
 using namespace std;
 
-void showMenu() {
-    cout << "===== Store Management Menu =====" << endl;
-    cout << "1. Display " << endl;
-    cout << "5. Add Data" << endl;
-    cout << "6. Edit Data" << endl;
-    cout << "7. Delete Data" << endl;
-    cout << "8. Search Data" << endl;
-    cout << "9. Sort Data" << endl;
-    cout << "10. Calculations" << endl;
-    cout << "0. Save and Exit" << endl;
-    cout << "Select option: ";
+void showMainMenu() {
+    cout << "=============================================\n";
+    cout << "            WELCOME TO STORE SYSTEM          \n";
+    cout << "=============================================\n";
+    cout << "MAIN MENU\n";
+    cout << "---------------------------------------------\n";
+    cout << "1. View data\n";
+    cout << "2. Add Data\n";
+    cout << "3. Edit Data\n";
+    cout << "4. Delete Data\n";
+    cout << "5. Search\n";
+    cout << "6. Exit\n";
+    cout << "---------------------------------------------\n";
+    cout << "Your choice: ";
 }
 
-void displayMenu(){
-    cout  << endl;
-    cout << "===== Display Menu =====" << endl;
-    cout << "1. Display All" << endl;
-    cout << "2. Display Products" << endl;
-    cout << "3. Display Employees" << endl;
-    cout << "4. Display Clients" << endl;
-    cout << "5. Display Purchases" << endl;
-    cout << "0. Return to Main Menu" << endl;
-    cout << "Select option: ";
+void showViewDataSubMenu() {
+    cout << endl;
+    cout << "MAIN MENU selected item: VIEW DATA\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "1. View all data\n";
+    cout << "2. View part of data\n";
+    cout << "3. Return to Main Menu\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "Your choice: ";
+}
+
+void showViewPartDataSubMenu()
+{
+    
+    cout << endl;
+    cout << "VIEW DATA selected item: VIEW PART OF DATA\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "1. View Products \n";
+    cout << "2. View Employees\n";
+    cout << "3. View Receipts\n";
+    cout << "3. View DiscountCards\n";
+    cout << "4. Return to View Data\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "Your choice: ";
 }

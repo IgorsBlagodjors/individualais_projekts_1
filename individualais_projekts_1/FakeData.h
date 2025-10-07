@@ -2,5 +2,5 @@
 #include "dataTypes.h"
 extern Product products[20];
 extern Employee employees[5];
-extern Purchase purchases[4];
-extern Client clients[4];
+extern DiscountCard cards[4];
+extern Receipt receipts[4];

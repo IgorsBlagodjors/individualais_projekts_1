@@ -3,120 +3,140 @@
     "code": 1001,
     "name": "Arabica Coffee 250g",
     "price": 4.99,
+    "quantityInStock": 50,
     "category": "Food"
   },
   {
     "code": 1002,
     "name": "Green Tea",
     "price": 3.49,
+    "quantityInStock": 80,
     "category": "Food"
   },
   {
     "code": 1003,
     "name": "Milk 1L",
     "price": 1.19,
+    "quantityInStock": 120,
     "category": "Food"
   },
   {
     "code": 1004,
     "name": "T-shirt 'Rock'",
     "price": 19.99,
+    "quantityInStock": 35,
     "category": "Clothes"
   },
   {
     "code": 1005,
     "name": "Jeans BlueFit",
     "price": 49.99,
+    "quantityInStock": 40,
     "category": "Clothes"
   },
   {
     "code": 1006,
     "name": "Winter Jacket",
     "price": 79.99,
+    "quantityInStock": 20,
     "category": "Clothes"
   },
   {
     "code": 1007,
     "name": "Bluetooth Headphones",
     "price": 59.9,
+    "quantityInStock": 25,
     "category": "Electronics"
   },
   {
     "code": 1008,
     "name": "Wireless Mouse",
     "price": 24.5,
+    "quantityInStock": 60,
     "category": "Electronics"
   },
   {
     "code": 1009,
     "name": "Smartwatch X2",
     "price": 99,
+    "quantityInStock": 30,
     "category": "Electronics"
   },
   {
     "code": 1010,
     "name": "Book 'C++ Basics'",
     "price": 14.99,
+    "quantityInStock": 45,
     "category": "Books"
   },
   {
     "code": 1011,
     "name": "Novel 'Wind Island'",
     "price": 11.5,
+    "quantityInStock": 50,
     "category": "Books"
   },
   {
     "code": 1012,
     "name": "Encyclopedia",
     "price": 25,
+    "quantityInStock": 15,
     "category": "Books"
   },
   {
     "code": 1013,
     "name": "Kitchen Towels 3pcs",
     "price": 5.49,
+    "quantityInStock": 75,
     "category": "HomeAndGarden"
   },
   {
     "code": 1014,
     "name": "Aromatic Candle",
     "price": 3.99,
+    "quantityInStock": 100,
     "category": "HomeAndGarden"
   },
   {
     "code": 1015,
     "name": "Pot Set 3pcs",
     "price": 29.99,
+    "quantityInStock": 25,
     "category": "HomeAndGarden"
   },
   {
     "code": 1016,
     "name": "Orange Juice 1L",
     "price": 2.39,
+    "quantityInStock": 90,
     "category": "Food"
   },
   {
     "code": 1017,
     "name": "Chocolate Cookies",
     "price": 2.99,
+    "quantityInStock": 70,
     "category": "Food"
   },
   {
     "code": 1018,
     "name": "Sports Shorts",
     "price": 22.49,
+    "quantityInStock": 30,
     "category": "Clothes"
   },
   {
     "code": 1019,
     "name": "USB Charger",
     "price": 9.99,
+    "quantityInStock": 55,
     "category": "Electronics"
   },
   {
     "code": 1020,
     "name": "Flower Pot",
     "price": 7.5,
+    "quantityInStock": 40,
     "category": "HomeAndGarden"
   }
 ]
