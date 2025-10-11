@@ -1,6 +1,10 @@
 #include "Function.h"
 #include <fstream>
 #include <iomanip>
+#include "menu.h"
+#include <iostream>
+#include "dataView.h"
+using namespace std;
 
 void saveProducts(const Product* arr, int size, const char* filename) {
     std::ofstream file(filename);
@@ -74,4 +78,60 @@ void saveReceipts(const Receipt* arr, int size, const char* filename) {
         file << "\n";
     }
     file << "]";
+}
+
+void runProgramMenu()
+{
+    int choice;
+    do {
+        showMainMenu();
+        cin >> choice;
+        switch (choice) {
+        case 1: {
+            int viewChoice;
+            do {
+                showViewDataSubMenu();
+                cin >> viewChoice;
+                switch (viewChoice) {
+                case 1:
+                    loadAndDisplayFullDataResponse();
+                    break;
+                case 2: {
+                    int subChoice;
+                    do {
+                        showViewPartDataSubMenu();
+                        cin >> subChoice;
+                        switch (subChoice) {
+                        case 1:
+                            loadAndDisplayProduct("products.txt");
+                            break;
+                        case 2:
+                            loadAndDisplayEmployees("employees.txt");
+                            break;
+                        case 3:
+                            loadAndDisplayReceipt("Receipts.txt");
+                            break;
+                        case 4:
+                            loadAndDisplayDiscountCard("discountCards.txt");
+                            break;
+                        }
+                        cout << endl;
+                    } while (subChoice != 5);
+                    break;
+                }
+                default:
+                    cout << "Invalid choice!" << endl;
+                }
+                cout << endl;
+            } while (viewChoice != 3);
+            break;
+        }
+        case 6:
+            cout << "Exiting program..." << endl;
+            break;
+        default:
+            cout << "Invalid choice!" << endl;
+        }
+        cout << endl;
+    } while (choice != 6);
 }

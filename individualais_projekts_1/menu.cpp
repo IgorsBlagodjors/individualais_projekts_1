@@ -38,8 +38,8 @@ void showViewPartDataSubMenu()
     cout << "1. View Products \n";
     cout << "2. View Employees\n";
     cout << "3. View Receipts\n";
-    cout << "3. View DiscountCards\n";
-    cout << "4. Return to View Data\n";
+    cout << "4. View DiscountCards\n";
+    cout << "5. Return to View Data\n";
     cout << "-----------------------------------------------------------\n";
     cout << "Your choice: ";
 }
