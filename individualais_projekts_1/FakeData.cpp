@@ -43,3 +43,15 @@ Receipt receipts[4] = {
     {5003, cards[2], products[10], 3, "2025-10-02"}, 
     {5004, cards[3], products[18], 5, "2025-10-03"}  
 };
+
+Product productss[20];
+int productSize = 0;
+
+Employee employeess[5];
+int employeeSize = 0;
+
+DiscountCard cardss[4];
+int cardSize = 0;
+
+Receipt receiptss[4];
+int receiptSize = 0;
