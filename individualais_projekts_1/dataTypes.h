@@ -1,4 +1,6 @@
 #pragma once
+
+
 enum struct Category : int {
     Food,
     Clothes,
@@ -7,12 +9,14 @@ enum struct Category : int {
     HomeAndGarden
 };
 
+// Discount card types
 enum struct DiscountCardType : int {
     Bronze,
     Silver,
     Gold
 };
 
+// Convert Category to string
 inline const char* categoryToChar(Category c) {
     switch (c) {
     case Category::Food: return "Food";
@@ -24,6 +28,7 @@ inline const char* categoryToChar(Category c) {
     }
 }
 
+// Convert DiscountCardType to string
 inline const char* cardToChar(DiscountCardType c) {
     switch (c) {
     case DiscountCardType::Bronze: return "Bronze";
@@ -33,6 +38,7 @@ inline const char* cardToChar(DiscountCardType c) {
     }
 }
 
+// Get discount percentage by card type
 inline double cardToDiscount(DiscountCardType c) {
     switch (c) {
     case DiscountCardType::Bronze: return 0.05;
@@ -49,6 +55,7 @@ struct Product {
     int quantityInStock;
     Category category;
 };
+
 struct DiscountCard {
     int cardNumber;
     char ownerFirstName[20];
@@ -70,18 +77,20 @@ struct Receipt {
     int quantity;
     char date[12];
 
+    // Get total without discount
     double getTotalNoDiscount() const {
         return product.price * quantity;
     }
 
+    // Get total with discount applied
     double getTotalWithDiscount() const {
         double total = getTotalNoDiscount();
         double discount = total * cardToDiscount(card.type);
         return total - discount;
     }
 
+    // Calculate VAT (default rate 21%)
     double getVAT(double rate = 0.21) const {
         return getTotalWithDiscount() * rate;
     }
-
 };

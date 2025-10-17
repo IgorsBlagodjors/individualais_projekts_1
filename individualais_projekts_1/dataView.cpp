@@ -4,19 +4,20 @@
 #include <string>
 #include "dataView.h"
 #include "dataTypes.h"
-#include "FakeData.h"
+#include "globals.h"
+
 using namespace std;
 
 
 void displayFullDataResponse()
 {
-    displayProducts(productss, productSize);
+    displayProducts(loadedProducts, loadedProductCount);
 	cout << endl;
-    displayEmployees(employeess, employeeSize);
+    displayEmployees(loadedEmployees, loadedEmployeeCount);
     cout << endl;
-    displayDiscountCards(cardss, cardSize);
+    displayDiscountCards(loadedCards, loadedCardCount);
     cout << endl;
-    displayReceipts(receiptss, receiptSize);
+    displayReceipts(loadedReceipts, loadedReceiptCount);
     cout << endl;
 }
 
@@ -116,5 +117,3 @@ void displayReceipts(const Receipt* arr, int size) {
 
     cout << "=======================================================================================================================" << endl;
 }
-
-

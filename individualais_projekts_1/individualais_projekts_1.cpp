@@ -1,17 +1,25 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <iomanip>
-using namespace std;
 #include "Function.h"
-#include "FakeData.h"
+#include "globals.h"
+
+using namespace std;
+
 
 int main() {
-
-    saveProducts(products, 20, "products.txt");
-    saveEmployees(employees, 5, "employees.txt");
-    saveDiscountCards(cards, 4, "discountCards.txt");
-    saveReceipts(receipts, 4, "Receipts.txt");
+	// Save initial data to files
+    saveProducts(defaultProducts, 20, "products.json");
+    saveEmployees(defaultEmployees, 5, "employees.json");
+    saveDiscountCards(defaultCards, 4, "discountCards.json");
+    saveReceipts(defaultReceipts, 4, "Receipts.json");
     cout << "Data has been saved to files!" << endl;
+    
+	// Load data from files
+    loadProducts("products.json", loadedProducts, loadedProductCount);
+    loadEmployees("employees.json", loadedEmployees, loadedEmployeeCount);
+    loadDiscountCards("discountCards.json", loadedCards, loadedCardCount);
+    loadReceipts("Receipts.json", loadedReceipts, loadedReceiptCount, loadedProducts, loadedProductCount, loadedCards, loadedCardCount);
 
 
    runProgramMenu();

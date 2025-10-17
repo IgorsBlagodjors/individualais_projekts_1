@@ -124,7 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dataView.cpp" />
-    <ClCompile Include="FakeData.cpp" />
+    <ClCompile Include="globals.cpp" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="individualais_projekts_1.cpp" />
     <ClCompile Include="menu.cpp" />

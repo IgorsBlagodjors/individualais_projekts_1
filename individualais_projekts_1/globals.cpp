@@ -1,5 +1,7 @@
-#include "FakeData.h"
-Product products[20] = {
+#include "globals.h"
+
+
+Product defaultProducts[20] = {
     {1001, "Arabica Coffee 250g", 4.99, 50, Category::Food},
     {1002, "Green Tea", 3.49, 80, Category::Food},
     {1003, "Milk 1L", 1.19, 120, Category::Food},
@@ -22,14 +24,14 @@ Product products[20] = {
     {1020, "Flower Pot", 7.50, 40, Category::HomeAndGarden}
 };
 
-DiscountCard cards[4] = {
+DiscountCard defaultCards[4] = {
     {10001, "Janis", "Ozols", DiscountCardType::Silver},
     {10002, "Anna", "Kalnina", DiscountCardType::Gold},
     {10003, "Marta", "Liepa", DiscountCardType::Bronze},
     {10004, "Andris", "Eglitis", DiscountCardType::Silver}
 };
 
-Employee employees[5] = {
+Employee defaultEmployees[5] = {
     {1, "Janis", "Berzins", Category::Food},
     {2, "Anna", "Ozola", Category::Clothes},
     {3, "Martins", "Kalnins", Category::Electronics},
@@ -37,21 +39,21 @@ Employee employees[5] = {
     {5, "Andris", "Eglitis", Category::HomeAndGarden}
 };
 
-Receipt receipts[4] = {
-    {5001, cards[0], products[0], 2, "2025-09-30"}, 
-    {5002, cards[1], products[7], 1, "2025-10-01"}, 
-    {5003, cards[2], products[10], 3, "2025-10-02"}, 
-    {5004, cards[3], products[18], 5, "2025-10-03"}  
+Receipt defaultReceipts[4] = {
+    {5001, defaultCards[0], defaultProducts[0], 2, "2025-09-30"}, 
+    {5002, defaultCards[1], defaultProducts[7], 1, "2025-10-01"}, 
+    {5003, defaultCards[2], defaultProducts[10], 3, "2025-10-02"}, 
+    {5004, defaultCards[3], defaultProducts[18], 5, "2025-10-03"}  
 };
 
-Product productss[20];
-int productSize = 0;
+Product loadedProducts[20];
+int loadedProductCount = 0;
 
-Employee employeess[5];
-int employeeSize = 0;
+Employee loadedEmployees[5];
+int loadedEmployeeCount = 0;
 
-DiscountCard cardss[4];
-int cardSize = 0;
+DiscountCard loadedCards[4];
+int loadedCardCount = 0;
 
-Receipt receiptss[4];
-int receiptSize = 0;
+Receipt loadedReceipts[4];
+int loadedReceiptCount = 0;
