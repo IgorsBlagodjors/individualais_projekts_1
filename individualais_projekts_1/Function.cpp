@@ -1,4 +1,4 @@
-#include "Function.h"
+﻿#include "Function.h"
 #include <fstream>
 #include <iomanip>
 #include "menu.h"
@@ -9,7 +9,9 @@
 using namespace std;
 
 
-// Save products to a JSON file
+// =============================== SAVE FUNCTIONS ===============================
+
+// Save products to JSON file
 void saveProducts(const Product* arr, int size, const char* filename) {
     ofstream file(filename);
     file << "[\n";
@@ -87,7 +89,7 @@ void saveReceipts(const Receipt* arr, int size, const char* filename) {
     file << "]";
 }
 
-// HELPER FUNCTIONS //
+// =============================== HELPER FUNCTIONS ===============================
 
 // Convert string to Category enum
 static Category charToCategory(const string& s) {
@@ -107,6 +109,7 @@ inline static DiscountCardType charToCardType(const string& s) {
     return DiscountCardType::Bronze;
 }
 
+// =============================== LOAD FUNCTIONS ===============================
 
 // Load products from JSON file
 void loadProducts(const char* filename, Product* arr, int& size) {
@@ -312,10 +315,167 @@ void loadReceipts(const char* filename, Receipt* arr, int& size, Product* produc
     size = index;
     cout << "Loaded " << size << " receipts from " << filename << "\n";
 }
+// =============================== ARRAY EXPANSION FUNCTIONS ===============================// 
 
-// PROGRAM MENU  //
+// Products expansion
+void expandProductsArray(int newCapacity) {
+    Product* temp = new Product[newCapacity];
+    for (int i = 0; i < loadedProductCount; i++) temp[i] = loadedProducts[i];
+    delete[] loadedProducts;
+    loadedProducts = temp;
+    loadedProductCapacity = newCapacity;
+    cout << "Product array expanded to " << newCapacity << " items!\n";
+}
+
+// Employees expansion
+void expandEmployeesArray(int newCapacity) {
+    Employee* temp = new Employee[newCapacity];
+    for (int i = 0; i < loadedEmployeeCount; i++) temp[i] = loadedEmployees[i];
+    delete[] loadedEmployees;
+    loadedEmployees = temp;
+    loadedEmployeeCapacity = newCapacity;
+    cout << "Employee array expanded to " << newCapacity << " items!\n";
+}
+
+// Discount Cards expansion
+void expandCardsArray(int newCapacity) {
+    DiscountCard* temp = new DiscountCard[newCapacity];
+    for (int i = 0; i < loadedCardCount; i++) temp[i] = loadedCards[i];
+    delete[] loadedCards;
+    loadedCardCapacity = newCapacity;
+    loadedCards = temp;
+    cout << "DiscountCard array expanded to " << newCapacity << " items!\n";
+}
+
+// Receipts expansion
+void expandReceiptsArray(int newCapacity) {
+    Receipt* temp = new Receipt[newCapacity];
+    for (int i = 0; i < loadedReceiptCount; i++) temp[i] = loadedReceipts[i];
+    delete[] loadedReceipts;
+    loadedReceiptCapacity = newCapacity;
+    loadedReceipts = temp;
+    cout << "Receipt array expanded to " << newCapacity << " items!\n";
+}
+
+// =============================== ADD FUNCTIONS ===============================// 
+
+// Add Product
+void addProduct() {
+    if (loadedProductCount >= loadedProductCapacity) {
+        expandProductsArray(loadedProductCapacity + 1); 
+    }
+
+    Product newProduct;
+    cout << "Enter product code: ";
+    cin >> newProduct.code;
+    cin.ignore();
+
+    cout << "Enter name: ";
+    cin.getline(newProduct.name, 50);
+
+    cout << "Enter price: ";
+    cin >> newProduct.price;
+
+    cout << "Enter quantity in stock: ";
+    cin >> newProduct.quantityInStock;
+
+    int category;
+    cout << "Select category (0-Food, 1-Clothes, 2-Electronics, 3-Books, 4-HomeAndGarden): ";
+    cin >> category;
+    newProduct.category = static_cast<Category>(category);
+
+    loadedProducts[loadedProductCount++] = newProduct;
+    cout << "Product added successfully!\n";
+
+    saveProducts(loadedProducts, loadedProductCount, "products.json");
+    cout << "Products saved to 'products.json' successfully!\n";
+}
+
+void addEmployee() {
+    if (loadedEmployeeCount >= loadedEmployeeCapacity) {
+        expandEmployeesArray(loadedEmployeeCapacity + 1); // увеличиваем на 5
+    }
+
+    Employee e;
+    cout << "\n=== ADD NEW EMPLOYEE ===\n";
+    cout << "Enter employee ID: ";
+    cin >> e.id;
+    cin.ignore();
+
+    cout << "Enter first name: ";
+    cin.getline(e.firstName, 10);
+
+    cout << "Enter last name: ";
+    cin.getline(e.lastName, 20);
+
+    int dep;
+    cout << "Select department (0-Food,1-Clothes,2-Electronics,3-Books,4-HomeAndGarden): ";
+    cin >> dep;
+    e.department = static_cast<Category>(dep);
+
+    loadedEmployees[loadedEmployeeCount++] = e;
+
+    cout << "Employee added successfully!\n";
+    saveEmployees(loadedEmployees, loadedEmployeeCount, "employees.json");
+    cout << "Employees saved to file!\n";
+}
+
+
+// Add DiscountCard
+void addDiscountCard() {
+    if (loadedCardCount >= loadedCardCapacity) expandCardsArray(loadedCardCapacity + 1);
+
+    DiscountCard c;
+    cout << "\nEnter card number: ";
+    cin >> c.cardNumber;
+    cin.ignore();
+    cout << "Enter owner's first name: ";
+    cin.getline(c.ownerFirstName, 20);
+    cout << "Enter owner's last name: ";
+    cin.getline(c.ownerLastName, 30);
+    cout << "Select card type (0-Bronze,1-Silver,2-Gold): ";
+    int t; cin >> t;
+    c.type = static_cast<DiscountCardType>(t);
+
+    loadedCards[loadedCardCount++] = c;
+    cout << "Discount card added!\n";
+    saveDiscountCards(loadedCards, loadedCardCount, "discountCards.json");
+    cout << "Discount cards saved to file!\n";
+}
+
+// Add Receipt
+void addReceipt() {
+    if (loadedReceiptCount >= loadedReceiptCapacity) expandReceiptsArray(loadedReceiptCapacity + 1);
+
+    Receipt r;
+    cout << "\nEnter receipt number: ";
+    cin >> r.receiptNumber;
+    cin.ignore();
+    cout << "Enter date (YYYY-MM-DD): ";
+    cin.getline(r.date, 12);
+
+    cout << "Select product:\n";
+    for (int i = 0; i < loadedProductCount; i++) cout << i + 1 << ". " << loadedProducts[i].name << endl;
+    int prodIndex; cin >> prodIndex; r.product = loadedProducts[prodIndex - 1];
+
+    cout << "Enter quantity: ";
+    cin >> r.quantity;
+
+    cout << "Select discount card:\n";
+    for (int i = 0; i < loadedCardCount; i++) cout << i + 1 << ". " << loadedCards[i].cardNumber << " (" << loadedCards[i].ownerFirstName << ")\n";
+    int cardIndex; cin >> cardIndex; r.card = loadedCards[cardIndex - 1];
+
+    loadedReceipts[loadedReceiptCount++] = r;
+    cout << "Receipt added!\n";
+    saveReceipts(loadedReceipts, loadedReceiptCount, "Receipts.json");
+    cout << "Receipts saved to file!\n";
+}
+
+// =============================== PROGRAM MENU ===============================//
 
 // Main program menu loop
+
+
 void runProgramMenu() {
     int choice;
     do {
@@ -377,6 +537,24 @@ void runProgramMenu() {
                 }
                 cout << endl;
             } while (viewChoice != 3);
+            break;
+        }
+		case 2: {
+            int addChoice;
+            do {
+                showAddDataSubMenu();
+                cin >> addChoice;
+
+                switch (addChoice) {
+                case 1: addProduct(); break;
+                case 2: addEmployee(); break;
+                case 3: addDiscountCard(); break;
+                case 4: addReceipt(); break;
+                default:
+                    if (addChoice != 5) cout << "Invalid choice!" << endl;
+                }
+                cout << endl;
+            } while (addChoice != 5);
             break;
         }
 

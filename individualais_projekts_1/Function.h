@@ -11,4 +11,8 @@ void loadEmployees(const char* filename, Employee* arr, int& size);
 void loadProducts(const char* filename, Product* arr, int& size);
 void loadDiscountCards(const char* filename, DiscountCard* arr, int& size);
 void loadReceipts(const char* filename, Receipt* arr, int& size, Product* products, int productSize, DiscountCard* cards, int cardSize);
+void addProduct();
+void addEmployee();
+void addDiscountCard();
+void addReceipt();
 void runProgramMenu();

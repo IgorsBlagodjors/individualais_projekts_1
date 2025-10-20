@@ -23,5 +23,9 @@ int main() {
 
 
    runProgramMenu();
+   delete[] loadedProducts;
+   delete[] loadedEmployees;
+   delete[] loadedCards;
+   delete[] loadedReceipts;
    return 0;
 }

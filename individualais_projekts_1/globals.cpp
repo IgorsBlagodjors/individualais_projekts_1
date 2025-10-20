@@ -46,14 +46,18 @@ Receipt defaultReceipts[4] = {
     {5004, defaultCards[3], defaultProducts[18], 5, "2025-10-03"}  
 };
 
-Product loadedProducts[20];
+Product* loadedProducts = new Product[20];
 int loadedProductCount = 0;
+int loadedProductCapacity = 20;
 
-Employee loadedEmployees[5];
+Employee* loadedEmployees = new Employee[5];
 int loadedEmployeeCount = 0;
+int loadedEmployeeCapacity = 5;
 
-DiscountCard loadedCards[4];
+DiscountCard* loadedCards = new DiscountCard[4];
 int loadedCardCount = 0;
+int loadedCardCapacity = 4;
 
-Receipt loadedReceipts[4];
+Receipt* loadedReceipts= new Receipt[4];
 int loadedReceiptCount = 0;
+int loadedReceiptCapacity = 4;

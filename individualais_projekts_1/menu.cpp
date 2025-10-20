@@ -31,9 +31,7 @@ void showViewDataSubMenu() {
     cout << "Your choice: ";
 }
 
-void showViewPartDataSubMenu()
-{
-    
+void showViewPartDataSubMenu() {  
     cout << endl;
     cout << "VIEW DATA selected item: VIEW PART OF DATA\n";
     cout << "-----------------------------------------------------------\n";
@@ -42,6 +40,19 @@ void showViewPartDataSubMenu()
     cout << "3. View Receipts\n";
     cout << "4. View DiscountCards\n";
     cout << "5. Return to View Data\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "Your choice: ";
+}
+
+void showAddDataSubMenu() {
+    cout << endl;
+    cout << "MAIN MENU selected item: ADD DATA\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "1. Add Product\n";
+    cout << "2. Add Employee\n";
+    cout << "3. Add Discount Card\n";
+    cout << "4. Add Receipt\n";
+    cout << "5. Return to Main Menu\n";
     cout << "-----------------------------------------------------------\n";
     cout << "Your choice: ";
 }

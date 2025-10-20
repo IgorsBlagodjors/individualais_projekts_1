@@ -7,14 +7,18 @@ extern Employee defaultEmployees[5];
 extern DiscountCard defaultCards[4];
 extern Receipt defaultReceipts[4];
 
-extern Product loadedProducts[20];
+extern Product* loadedProducts;
 extern int loadedProductCount;
+extern int loadedProductCapacity;
 
-extern Employee loadedEmployees[5];
+extern Employee* loadedEmployees;
 extern int loadedEmployeeCount;
+extern int loadedEmployeeCapacity;
 
-extern DiscountCard loadedCards[4];
+extern DiscountCard* loadedCards;
 extern int loadedCardCount;
+extern int loadedCardCapacity;
 
-extern Receipt loadedReceipts[4];
+extern Receipt* loadedReceipts;
 extern int loadedReceiptCount;
+extern int loadedReceiptCapacity;
