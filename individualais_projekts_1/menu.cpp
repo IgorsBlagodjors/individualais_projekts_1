@@ -15,7 +15,7 @@ void showMainMenu() {
     cout << "3. Edit Data\n";
     cout << "4. Delete Data\n";
     cout << "5. Search\n";
-    cout << "6. Exit\n";
+    cout << "6. Save and Exit\n";
     cout << "---------------------------------------------\n";
     cout << "Your choice: ";
 }
@@ -52,6 +52,19 @@ void showAddDataSubMenu() {
     cout << "2. Add Employee\n";
     cout << "3. Add Discount Card\n";
     cout << "4. Add Receipt\n";
+    cout << "5. Return to Main Menu\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "Your choice: ";
+}
+
+void showEditDataMenu() {
+    cout << endl;
+    cout << "EDIT DATA selected item: EDIT DATA\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "1. Edit Products\n";
+    cout << "2. Edit Employees\n";
+    cout << "3. Edit Receipts\n";
+    cout << "4. Edit Discount Cards\n";
     cout << "5. Return to Main Menu\n";
     cout << "-----------------------------------------------------------\n";
     cout << "Your choice: ";

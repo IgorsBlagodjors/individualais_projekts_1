@@ -2,9 +2,9 @@
 #include "dataTypes.h"
 
 
-extern Product defaultProducts[20];
-extern Employee defaultEmployees[5];
-extern DiscountCard defaultCards[4];
+extern Product initialProducts[20];
+extern Employee initialEmployees[5];
+extern DiscountCard initialCards[4];
 extern Receipt defaultReceipts[4];
 
 extern Product* loadedProducts;

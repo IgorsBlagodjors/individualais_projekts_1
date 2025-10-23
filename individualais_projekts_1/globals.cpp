@@ -1,7 +1,7 @@
 #include "globals.h"
 
 
-Product defaultProducts[20] = {
+Product initialProducts[20] = {
     {1001, "Arabica Coffee 250g", 4.99, 50, Category::Food},
     {1002, "Green Tea", 3.49, 80, Category::Food},
     {1003, "Milk 1L", 1.19, 120, Category::Food},
@@ -24,26 +24,26 @@ Product defaultProducts[20] = {
     {1020, "Flower Pot", 7.50, 40, Category::HomeAndGarden}
 };
 
-DiscountCard defaultCards[4] = {
+DiscountCard initialCards[4] = {
     {10001, "Janis", "Ozols", DiscountCardType::Silver},
     {10002, "Anna", "Kalnina", DiscountCardType::Gold},
     {10003, "Marta", "Liepa", DiscountCardType::Bronze},
     {10004, "Andris", "Eglitis", DiscountCardType::Silver}
 };
 
-Employee defaultEmployees[5] = {
-    {1, "Janis", "Berzins", Category::Food},
-    {2, "Anna", "Ozola", Category::Clothes},
-    {3, "Martins", "Kalnins", Category::Electronics},
-    {4, "Laura", "Liepa", Category::Books},
-    {5, "Andris", "Eglitis", Category::HomeAndGarden}
+Employee initialEmployees[5] = {
+    {11, "Janis", "Berzins", Category::Food},
+    {23, "Anna", "Ozola", Category::Clothes},
+    {36, "Martins", "Kalnins", Category::Electronics},
+    {41, "Laura", "Liepa", Category::Books},
+    {52, "Andris", "Eglitis", Category::HomeAndGarden}
 };
 
 Receipt defaultReceipts[4] = {
-    {5001, defaultCards[0], defaultProducts[0], 2, "2025-09-30"}, 
-    {5002, defaultCards[1], defaultProducts[7], 1, "2025-10-01"}, 
-    {5003, defaultCards[2], defaultProducts[10], 3, "2025-10-02"}, 
-    {5004, defaultCards[3], defaultProducts[18], 5, "2025-10-03"}  
+    {5001, initialCards[0], initialProducts[0], 2, "2025-09-30"}, 
+    {5002, initialCards[1], initialProducts[7], 1, "2025-10-01"}, 
+    {5003, initialCards[2], initialProducts[10], 3, "2025-10-02"}, 
+    {5004, initialCards[3], initialProducts[18], 5, "2025-10-03"}  
 };
 
 Product* loadedProducts = new Product[20];

@@ -22,21 +22,25 @@ void displayFullDataResponse()
 }
 
 void displayEmployees(const Employee* arr, int size) {
-    cout << "=================== EMPLOYEES ===================" << endl;
-    cout << left << setw(5) << "N"
-        << setw(15) << "First name"
-        << setw(15) << "Last name"
+    cout << "========================= EMPLOYEES =========================" << endl;
+    cout << left 
+        << setw(5) << "N"
+        << setw(5) << "ID"
+        << setw(20) << "First name"
+        << setw(20) << "Last name"
         << setw(15) << "Department" << endl;
-    cout << "-------------------------------------------------" << endl;
+    cout << "-------------------------------------------------------------" << endl;
 
     for (int i = 0; i < size; i++) {
-        cout << left << setw(5) << i + 1
-            << setw(15) << arr[i].firstName
-            << setw(15) << arr[i].lastName
-            << setw(15) << categoryToChar(arr[i].department) 
+        cout << left
+            << setw(5) << i + 1
+            << setw(5) << arr[i].id
+            << setw(20) << arr[i].firstName
+            << setw(20) << arr[i].lastName
+            << setw(15) << categoryToChar(arr[i].department)
             << endl;
     }
-    cout << "=================================================" << endl;
+    cout << "=============================================================" << endl;
 }
 
 void displayProducts(const Product* arr, int size) {
@@ -88,7 +92,6 @@ void displayDiscountCards(const DiscountCard* arr, int size) {
 void displayReceipts(const Receipt* arr, int size) {
     cout << "====================================================== RECEIPTS ======================================================" << endl;
     cout << left
-        << setw(5) << "N"
         << setw(12) << "Receipt#"
         << setw(12) << "Date"
         << setw(22) << "Product"
@@ -102,7 +105,6 @@ void displayReceipts(const Receipt* arr, int size) {
 
     for (int i = 0; i < size; i++) {
         cout << left
-            << setw(5) << i + 1
             << setw(12) << arr[i].receiptNumber
             << setw(12) << arr[i].date
             << setw(22) << arr[i].product.name
