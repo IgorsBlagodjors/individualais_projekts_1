@@ -109,24 +109,6 @@ void arrayExtension(T*& arr, int& size, int& capacity, const T& element) {
     arr[size++] = element;
 }
 
-// Convert string to Category enum
-static Category charToCategory(const string& s) {
-    if (s == "Food") return Category::Food;
-    if (s == "Clothes") return Category::Clothes;
-    if (s == "Electronics") return Category::Electronics;
-    if (s == "Books") return Category::Books;
-    if (s == "HomeAndGarden") return Category::HomeAndGarden;
-    return Category::Food;
-}
-
-// Convert string to DiscountCardType enum
-inline static DiscountCardType charToCardType(const string& s) {
-    if (s == "Bronze") return DiscountCardType::Bronze;
-    if (s == "Silver") return DiscountCardType::Silver;
-    if (s == "Gold") return DiscountCardType::Gold;
-    return DiscountCardType::Bronze;
-}
-
 // Check if file exists
 bool fileExists(const string& filename) {
     ifstream file(filename);
@@ -488,7 +470,6 @@ static void addReceipt() {
     cout << "\033[32mReceipt added!\033[0m\n";
 }
 
-
 // =============================== EDIT FUNCTIONS ===============================
 
 // Edit Product
@@ -788,10 +769,6 @@ void runProgramMenu() {
                 case 4:
                     displayDiscountCards(loadedCards, loadedCardCount);
 					editDiscountCard(loadedCards, loadedCardCount);
-                   
-                    break;
-                case 5:
-                    cout << "Returning to main menu...\n";
                     break;
                 default:
                     cout << "\033[1;31m\nInvalid choice. Try again.\033[0m\n";

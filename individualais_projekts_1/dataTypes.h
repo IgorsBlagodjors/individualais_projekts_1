@@ -1,5 +1,6 @@
-#pragma once
-
+﻿#pragma once
+#include <string>
+using namespace std;
 
 enum struct Category : int {
     Food,
@@ -9,14 +10,12 @@ enum struct Category : int {
     HomeAndGarden
 };
 
-// Discount card types
 enum struct DiscountCardType : int {
     Bronze,
     Silver,
     Gold
 };
 
-// Convert Category to string
 inline const char* categoryToChar(Category c) {
     switch (c) {
     case Category::Food: return "Food";
@@ -28,7 +27,6 @@ inline const char* categoryToChar(Category c) {
     }
 }
 
-// Convert DiscountCardType to string
 inline const char* cardToChar(DiscountCardType c) {
     switch (c) {
     case DiscountCardType::Bronze: return "Bronze";
@@ -38,7 +36,22 @@ inline const char* cardToChar(DiscountCardType c) {
     }
 }
 
-// Get discount percentage by card type
+inline Category charToCategory(const string& s) {
+    if (s == "Food") return Category::Food;
+    if (s == "Clothes") return Category::Clothes;
+    if (s == "Electronics") return Category::Electronics;
+    if (s == "Books") return Category::Books;
+    if (s == "HomeAndGarden") return Category::HomeAndGarden;
+    return Category::Food;
+}
+
+inline DiscountCardType charToCardType(const string& s) {
+    if (s == "Bronze") return DiscountCardType::Bronze;
+    if (s == "Silver") return DiscountCardType::Silver;
+    if (s == "Gold") return DiscountCardType::Gold;
+    return DiscountCardType::Bronze; 
+}
+
 inline double cardToDiscount(DiscountCardType c) {
     switch (c) {
     case DiscountCardType::Bronze: return 0.05;
@@ -77,19 +90,16 @@ struct Receipt {
     int quantity;
     char date[12];
 
-    // Get total without discount
     double getTotalNoDiscount() const {
         return product.price * quantity;
     }
 
-    // Get total with discount applied
     double getTotalWithDiscount() const {
         double total = getTotalNoDiscount();
         double discount = total * cardToDiscount(card.type);
         return total - discount;
     }
 
-    // Calculate VAT (default rate 21%)
     double getVAT(double rate = 0.21) const {
         return getTotalWithDiscount() * rate;
     }
