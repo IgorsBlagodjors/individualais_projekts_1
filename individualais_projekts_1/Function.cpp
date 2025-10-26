@@ -109,6 +109,40 @@ void arrayExtension(T*& arr, int& size, int& capacity, const T& element) {
     arr[size++] = element;
 }
 
+// Universal function to delete an item from a dynamic array
+template<typename T>
+void deleteItem(T*& arr, int& size, void (*displayFunc)(const T*, int), const char* itemName) {
+    if (size == 0) {
+        cout << "\033[31mNo " << itemName << " to delete!\033[0m\n";
+        return;
+    }
+
+    displayFunc(arr, size);
+
+    int index;
+    cout << "Enter number of " << itemName << " to delete (1-" << size << "), (0 to cancel): ";
+    cin >> index;
+
+    if (index == 0) {
+        cout << "\033[33mDelete cancelled.\033[0m\n";
+        return;
+    }
+
+    if (index < 1 || index > size) {
+        cout << "\033[31mInvalid number!\033[0m\n";
+        return;
+    }
+
+    // Shift elements to remove selected
+    for (int i = index - 1; i < size - 1; ++i) {
+        arr[i] = arr[i + 1];
+    }
+
+    size--;
+    cout << "\033[32mItem deleted successfully!\033[0m\n";
+}
+
+
 // Check if file exists
 bool fileExists(const string& filename) {
     ifstream file(filename);
@@ -373,9 +407,14 @@ void loadReceipts(const char* filename, Receipt*& arr, int& size,
 static void addProduct() {
     Product newProduct;
     cout << "\n=== ADD NEW PRODUCT ===\n";
-    cout << "Enter product code: ";
+    cout << "Enter product code ( 0 to cancel): ";
     cin >> newProduct.code;
     cin.ignore();
+
+    if (newProduct.code == 0) {
+        cout << "\033[33mAdd product cancelled.\033[0m\n";
+        return;
+    }
 
     cout << "Enter name: ";
     cin.getline(newProduct.name, 50);
@@ -396,77 +435,91 @@ static void addProduct() {
 }
 
 static void addEmployee() {
-    Employee e;
+    Employee newEmployee;
     cout << "\n=== ADD NEW EMPLOYEE ===\n";
-    cout << "Enter employee ID: ";
-    cin >> e.id;
+    cout << "Enter employee ID ( 0 to cancel): ";
+    cin >> newEmployee.id;
     cin.ignore();
 
+    if (newEmployee.id == 0) {
+        cout << "\033[33mAdd employee cancelled.\033[0m\n";
+        return;
+    }
+
     cout << "Enter first name: ";
-    cin.getline(e.firstName, 10);
+    cin.getline(newEmployee.firstName, 10);
 
     cout << "Enter last name: ";
-    cin.getline(e.lastName, 20);
+    cin.getline(newEmployee.lastName, 20);
 
     int dep;
     cout << "Select department (0-Food,1-Clothes,2-Electronics,3-Books,4-HomeAndGarden): ";
     cin >> dep;
-    e.department = static_cast<Category>(dep);
+    newEmployee.department = static_cast<Category>(dep);
 
-    arrayExtension(loadedEmployees, loadedEmployeeCount, loadedEmployeeCapacity, e);
+    arrayExtension(loadedEmployees, loadedEmployeeCount, loadedEmployeeCapacity, newEmployee);
     cout << "\033[32mEmployee added successfully!\033[0m\n";
 }
 
 // Add DiscountCard
 static void addDiscountCard() {
-    DiscountCard c;
+    DiscountCard card;
     cout << "\n=== ADD NEW DISCOUNT CARD ===\n";
-    cout << "Enter card number: ";
-    cin >> c.cardNumber;
+    cout << "Enter card number ( 0 to cancel): ";
+    cin >> card.cardNumber;
     cin.ignore();
 
+    if (card.cardNumber == 0) {
+        cout << "\033[33mAdd discount card cancelled.\033[0m\n";
+        return;
+    }
+
     cout << "Enter owner's first name: ";
-    cin.getline(c.ownerFirstName, 20);
+    cin.getline(card.ownerFirstName, 20);
 
     cout << "Enter owner's last name: ";
-    cin.getline(c.ownerLastName, 30);
+    cin.getline(card.ownerLastName, 30);
 
-    int t;
+    int type;
     cout << "Select card type (0-Bronze,1-Silver,2-Gold): ";
-    cin >> t;
-    c.type = static_cast<DiscountCardType>(t);
+    cin >> type;
+    card.type = static_cast<DiscountCardType>(type);
 
-    arrayExtension(loadedCards, loadedCardCount, loadedCardCapacity, c);
+    arrayExtension(loadedCards, loadedCardCount, loadedCardCapacity, card);
     cout << "\033[32mDiscount card added!\033[0m\n";
 }
 
 // Add Receipt
 static void addReceipt() {
-    Receipt r;
+    Receipt receipt;
     cout << "\n=== ADD NEW RECEIPT ===\n";
-    cout << "Enter receipt number: ";
-    cin >> r.receiptNumber;
+    cout << "Enter receipt number ( 0 to cancel): ";
+    cin >> receipt.receiptNumber;
     cin.ignore();
 
+    if (receipt.receiptNumber == 0) {
+        cout << "\033[33mAdd receipt cancelled.\033[0m\n";
+        return;
+    }
     cout << "Enter date (YYYY-MM-DD): ";
-    cin.getline(r.date, 12);
+    cin.getline(receipt.date, 12);
 
     cout << "Select product:\n";
     for (int i = 0; i < loadedProductCount; i++)
         cout << i + 1 << ". " << loadedProducts[i].name << endl;
     int prodIndex; cin >> prodIndex;
-    r.product = loadedProducts[prodIndex - 1];
+    receipt.product = loadedProducts[prodIndex - 1];
 
     cout << "Enter quantity: ";
-    cin >> r.quantity;
+    cin >> receipt.quantity;
 
     cout << "Select discount card:\n";
     for (int i = 0; i < loadedCardCount; i++)
         cout << i + 1 << ". " << loadedCards[i].cardNumber << " (" << loadedCards[i].ownerFirstName << ")\n";
     int cardIndex; cin >> cardIndex;
-    r.card = loadedCards[cardIndex - 1];
+    receipt.card = loadedCards[cardIndex - 1];
 
-    arrayExtension(loadedReceipts, loadedReceiptCount, loadedReceiptCapacity, r);
+    arrayExtension(loadedReceipts, loadedReceiptCount, loadedReceiptCapacity, receipt);
     cout << "\033[32mReceipt added!\033[0m\n";
 }
 
@@ -474,9 +527,15 @@ static void addReceipt() {
 
 // Edit Product
 static void editProduct(Product* arr, int size) {
+    displayProducts(loadedProducts, loadedProductCount);
     int code;
-    cout << "Enter product Code to edit: ";
+    cout << "Enter product Code to edit (0 to cancel): ";
     cin >> code;
+
+    if (code == 0) {
+        cout << "\033[33mEdit cancelled.\033[0m\n";
+        return; 
+    }
 
     bool found = false;
     for (int i = 0; i < size; i++) {
@@ -516,9 +575,15 @@ static void editProduct(Product* arr, int size) {
 
 // Edit Employee
 static void editEmployee(Employee* arr, int size) {
+    displayEmployees(loadedEmployees, loadedEmployeeCount);
     int id;
-    cout << "Enter employee ID to edit: ";
+    cout << "Enter employee ID to edit (0 to cancel): ";
     cin >> id;
+
+    if (id == 0) {
+        cout << "\033[33mEdit cancelled.\033[0m\n";
+        return;
+    }
 
     bool found = false;
     for (int i = 0; i < size; i++) {
@@ -564,9 +629,16 @@ static void editEmployee(Employee* arr, int size) {
 }
 // Edit Discount Card 
 static void editDiscountCard(DiscountCard* arr, int size) {
+    displayDiscountCards(loadedCards, loadedCardCount);
     int number;
-    cout << "Enter discount card number to edit: ";
+    cout << "Enter discount card number to edit (0 to cancel): ";
     cin >> number;
+
+    if (number == 0) {
+        cout << "\033[33mEdit cancelled.\033[0m\n";
+        return;
+    }
+
     bool found = false;
     for (int i = 0; i < size; i++) {
         if (arr[i].cardNumber == number) {
@@ -611,9 +683,15 @@ static void editDiscountCard(DiscountCard* arr, int size) {
 
 // Edit Receipt 
 static void editReceipt(Receipt* arr, int size) {
+    displayReceipts(loadedReceipts, loadedReceiptCount);
     int number;
-    cout << "Enter receipt number to edit: ";
+    cout << "Enter receipt number to edit (0 to cancel): ";
     cin >> number;
+
+    if (number == 0) {
+        cout << "\033[33mEdit cancelled.\033[0m\n";
+        return;
+    }
 
     bool found = false;
     for (int i = 0; i < size; i++) {
@@ -684,11 +762,8 @@ void runProgramMenu() {
                     if (loadedProductCount == 0 && loadedEmployeeCount == 0 && loadedCardCount == 0 && loadedReceiptCount == 0) {
                         cout << "\033[1;31m\nNo data available to display!\033[0m\n";
                     }
-                    else {
-                        displayFullDataResponse();
-                    }
+                    else  displayFullDataResponse(); 
                     break;
-
                 case 2: {
                     // Display part of data
                     int subChoice;
@@ -706,12 +781,12 @@ void runProgramMenu() {
                             else cout << "\033[1;31m\nNo employees available!\033[0m\n";
                             break;
                         case 3:
-                            if (loadedReceiptCount > 0) displayReceipts(loadedReceipts, loadedReceiptCount);
-                            else cout << "\033[1;31m\nNo receipts available!\033[0m\n";
-                            break;
-                        case 4:
                             if (loadedCardCount > 0) displayDiscountCards(loadedCards, loadedCardCount);
                             else cout << "\033[1;31m\nNo discount cards available!\033[0m\n";
+                            break;
+                        case 4:
+                            if (loadedReceiptCount > 0) displayReceipts(loadedReceipts, loadedReceiptCount);
+                            else cout << "\033[1;31m\nNo receipts available!\033[0m\n";
                             break;
                         default:
                             if (subChoice != 5) cout << "\033[1;31m\nInvalid choice!\033[0m\n" << endl;
@@ -720,7 +795,6 @@ void runProgramMenu() {
                     } while (subChoice != 5);
                     break;
                 }
-
                 default:
                     if (viewChoice != 3) cout << "\033[1;31m\nInvalid choice!\033[0m\n" << endl;
                 }
@@ -755,28 +829,60 @@ void runProgramMenu() {
 
                 switch (editChoice) {
                 case 1:
-                    displayProducts(loadedProducts, loadedProductCount);
-                    editProduct(loadedProducts, loadedProductCount);
+                    if (loadedProductCount > 0) editProduct(loadedProducts, loadedProductCount);
+                    else cout << "\033[1;31m\nNo products available!\033[0m\n";
                     break;
                 case 2:
-                    displayEmployees(loadedEmployees, loadedEmployeeCount);
-                    editEmployee(loadedEmployees, loadedEmployeeCount);
+                    if (loadedEmployeeCount > 0) editEmployee(loadedEmployees, loadedEmployeeCount);
+                    else cout << "\033[1;31m\nNo employees available!\033[0m\n";
                     break;
                 case 3:
-                    displayReceipts(loadedReceipts, loadedReceiptCount);
-                    editReceipt(loadedReceipts, loadedReceiptCount);
+                    if (loadedCardCount > 0) editDiscountCard(loadedCards, loadedCardCount);
+                    else cout << "\033[1;31m\nNo discount cards available!\033[0m\n";
                     break;
                 case 4:
-                    displayDiscountCards(loadedCards, loadedCardCount);
-					editDiscountCard(loadedCards, loadedCardCount);
+                    if (loadedReceiptCount > 0)  editReceipt(loadedReceipts, loadedReceiptCount);
+                    else cout << "\033[1;31m\nNo receipts available!\033[0m\n";
                     break;
                 default:
-                    cout << "\033[1;31m\nInvalid choice. Try again.\033[0m\n";
+                    if (editChoice != 5) cout << "\033[1;31m\nInvalid choice. Try again.\033[0m\n";
                     break;
                 }
             } while (editChoice != 5);
             break;
         }
+        case 4:
+            // Display remove data menu
+            int removeChoice;
+            do {
+                showRemoveDataMenu();
+                cin >> removeChoice;
+
+                switch (removeChoice) {
+                case 1:
+                    if (loadedProductCount > 0) deleteItem(loadedProducts, loadedProductCount, displayProducts, "product");
+                    else cout << "\033[1;31m\nNo products available!\033[0m\n";
+                    break;
+                case 2:
+                    if (loadedProductCount > 0) deleteItem(loadedEmployees, loadedEmployeeCount, displayEmployees, "employee");
+                    else cout << "\033[1;31m\nNo products available!\033[0m\n";
+                    break;
+                case 3:
+                    if (loadedProductCount > 0) deleteItem(loadedCards, loadedCardCount, displayDiscountCards, "discount card");
+                    else cout << "\033[1;31m\nNo products available!\033[0m\n";
+                    break;
+                case 4:
+                    if (loadedProductCount > 0) deleteItem(loadedReceipts, loadedReceiptCount, displayReceipts, "receipt");
+                    else cout << "\033[1;31m\nNo products available!\033[0m\n";
+                    break;
+                default:
+                    if (removeChoice != 5) cout << "\033[1;31m\nInvalid choice. Try again.\033[0m\n";
+                    break;
+                }
+            } while (removeChoice != 5);
+            break;
+		case 5:
+			// Search data
         case 6:
 			// Save to file and exit
             saveAndExit();
