@@ -5,14 +5,11 @@
 #include "dataView.h"
 #include "dataTypes.h"
 #include "globals.h"
-
 using namespace std;
 
-
-void displayFullDataResponse()
-{
+void displayFullDataResponse() {
     displayProducts(loadedProducts, loadedProductCount);
-	cout << endl;
+    cout << endl;
     displayEmployees(loadedEmployees, loadedEmployeeCount);
     cout << endl;
     displayDiscountCards(loadedCards, loadedCardCount);
@@ -22,8 +19,13 @@ void displayFullDataResponse()
 }
 
 void displayEmployees(const Employee* arr, int size) {
-    cout << "========================= EMPLOYEES =========================" << endl;
-    cout << left 
+    if (size == 0) {
+        cout << "\033[31mNo employee to display.\033[0m\n";
+        return;
+    }
+
+    cout << "\033[32m========================= EMPLOYEES =========================\033[0m" << endl;
+    cout << left
         << setw(5) << "N"
         << setw(5) << "ID"
         << setw(20) << "First name"
@@ -40,11 +42,17 @@ void displayEmployees(const Employee* arr, int size) {
             << setw(15) << categoryToChar(arr[i].department)
             << endl;
     }
+
     cout << "=============================================================" << endl;
 }
 
 void displayProducts(const Product* arr, int size) {
-    cout << "================================ PRODUCTS ================================" << endl;
+    if (size == 0) {
+        cout << "\033[31mNo products to display.\033[0m\n";
+        return;
+    }
+
+    cout << "\033[32m================================ PRODUCTS ================================\033[0m" << endl;
     cout << left
         << setw(5) << "N"
         << setw(10) << "Code"
@@ -64,11 +72,17 @@ void displayProducts(const Product* arr, int size) {
             << setw(15) << categoryToChar(arr[i].category)
             << endl;
     }
+
     cout << "===============================================================================" << endl;
 }
 
 void displayDiscountCards(const DiscountCard* arr, int size) {
-    cout << "===================== DISCOUNT CARDS =====================" << endl;
+    if (size == 0) {
+        cout << "\033[31mNo discount cards to display.\033[0m\n";
+        return;
+    }
+
+    cout << "\033[32m===================== DISCOUNT CARDS =====================\033[0m" << endl;
     cout << left
         << setw(5) << "N"
         << setw(15) << "Card Number"
@@ -86,36 +100,62 @@ void displayDiscountCards(const DiscountCard* arr, int size) {
             << setw(15) << cardToChar(arr[i].type)
             << endl;
     }
+
     cout << "==========================================================" << endl;
 }
 
 void displayReceipts(const Receipt* arr, int size) {
-    cout << "====================================================== RECEIPTS ======================================================" << endl;
+    if (size == 0) {
+        cout << "\033[31mNo receipts to display.\033[0m\n";
+        return;
+    }
+
+    cout << "\033[32m============= RECEIPTS (PART 1: General Info) ==================\033[0m" << endl;
     cout << left
+        << setw(5) << "N"
         << setw(12) << "Receipt#"
         << setw(12) << "Date"
-        << setw(22) << "Product"
+        << setw(25) << "Product"
         << setw(8) << "Qty"
         << setw(10) << "Price"
-        << setw(16) << "Total (no disc)"
-        << setw(16) << "Total (disc)"
-        << setw(10) << "VAT"
-        << setw(12) << "Card#" << endl;
-    cout << "----------------------------------------------------------------------------------------------------------------------" << endl;
+        << endl;
+    cout << "----------------------------------------------------------------" << endl;
 
     for (int i = 0; i < size; i++) {
         cout << left
+            << setw(5) << i + 1
             << setw(12) << arr[i].receiptNumber
             << setw(12) << arr[i].date
-            << setw(22) << arr[i].product.name
+            << setw(25) << arr[i].product.name
             << setw(8) << arr[i].quantity
             << setw(10) << fixed << setprecision(2) << arr[i].product.price
-            << setw(16) << fixed << setprecision(2) << arr[i].getTotalNoDiscount()
-            << setw(16) << fixed << setprecision(2) << arr[i].getTotalWithDiscount()
-            << setw(10) << fixed << setprecision(2) << arr[i].getVAT()
-            << setw(12) << arr[i].card.cardNumber
             << endl;
     }
 
-    cout << "=======================================================================================================================" << endl;
+    cout << "=================================================================" << endl;
+    cout << endl;
+
+    cout << "\033[32m========== RECEIPTS (PART 2: Totals and Card Info) ===============\033[0m" << endl;
+    cout << left
+        << setw(5) << "N"
+        << setw(12) << "Receipt#"
+        << setw(16) << "Total (no disc)"
+        << setw(16) << "Total (disc)"
+        << setw(10) << "VAT"
+        << setw(15) << "Card#"
+        << endl;
+    cout << "----------------------------------------------------------------" << endl;
+
+    for (int i = 0; i < size; i++) {
+        cout << left
+            << setw(5) << i + 1
+            << setw(12) << arr[i].receiptNumber
+            << setw(16) << fixed << setprecision(2) << arr[i].getTotalNoDiscount()
+            << setw(16) << fixed << setprecision(2) << arr[i].getTotalWithDiscount()
+            << setw(10) << fixed << setprecision(2) << arr[i].getVAT()
+            << setw(15) << arr[i].card.cardNumber
+            << endl;
+    }
+
+    cout << "=================================================================" << endl;
 }

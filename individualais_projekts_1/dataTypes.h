@@ -49,7 +49,7 @@ inline DiscountCardType charToCardType(const string& s) {
     if (s == "Bronze") return DiscountCardType::Bronze;
     if (s == "Silver") return DiscountCardType::Silver;
     if (s == "Gold") return DiscountCardType::Gold;
-    return DiscountCardType::Bronze; 
+    return DiscountCardType::Bronze;
 }
 
 inline double cardToDiscount(DiscountCardType c) {

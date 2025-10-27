@@ -1,7 +1,6 @@
 #pragma once
 #include "dataTypes.h"
 
-
 extern Product initialProducts[20];
 extern Employee initialEmployees[5];
 extern DiscountCard initialCards[4];

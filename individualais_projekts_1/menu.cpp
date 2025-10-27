@@ -1,8 +1,6 @@
 #include <iostream>
 #include "menu.h"
-
 using namespace std;
-
 
 void showMainMenu() {
     cout << "=============================================\n";
@@ -14,8 +12,9 @@ void showMainMenu() {
     cout << "2. Add Data\n";
     cout << "3. Edit Data\n";
     cout << "4. Delete Data\n";
-    cout << "5. Search\n";
-    cout << "6. Save and Exit\n";
+    cout << "5. Search Receipt\n";
+    cout << "6. Sorting\n";
+    cout << "7. Save and Exit\n";
     cout << "---------------------------------------------\n";
     cout << "Your choice: ";
 }
@@ -31,11 +30,11 @@ void showViewDataSubMenu() {
     cout << "Your choice: ";
 }
 
-void showViewPartDataSubMenu() {  
+void showViewPartDataSubMenu() {
     cout << endl;
     cout << "VIEW DATA selected item: VIEW PART OF DATA\n";
     cout << "-----------------------------------------------------------\n";
-    cout << "1. View Products \n";
+    cout << "1. View Products\n";
     cout << "2. View Employees\n";
     cout << "3. View DiscountCards\n";
     cout << "4. View Receipts\n";
@@ -70,7 +69,7 @@ void showEditDataMenu() {
     cout << "Your choice: ";
 }
 
-void showRemoveDataMenu(){
+void showRemoveDataMenu() {
     cout << endl;
     cout << "MAIN MENU selected item: REMOVE DATA\n";
     cout << "-----------------------------------------------------------\n";
@@ -79,6 +78,20 @@ void showRemoveDataMenu(){
     cout << "3. Remove Discount Cards\n";
     cout << "4. Remove Receipts\n";
     cout << "5. Return to Main Menu\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "Your choice: ";
+}
+
+void showSortDataMenu() {
+    cout << endl;
+    cout << "MAIN MENU selected item: SORTING\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "1. Product by name\n";
+    cout << "2. Product by price\n";
+    cout << "3. Product price descending\n";
+    cout << "4. Product by quantity\n";
+    cout << "5. Product quantity descending\n";
+    cout << "6. Return to Main Menu\n";
     cout << "-----------------------------------------------------------\n";
     cout << "Your choice: ";
 }

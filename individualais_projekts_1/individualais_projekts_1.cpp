@@ -3,9 +3,7 @@
 #include <iomanip>
 #include "Function.h"
 #include "globals.h"
-
 using namespace std;
-
 
 int main() {
 	// Save initial data to files

@@ -1,7 +1,6 @@
 #pragma once
 #include "dataTypes.h"
 
-
 void displayFullDataResponse();
 void displayEmployees(const Employee* arr, int size);
 void displayProducts(const Product* arr, int size);
