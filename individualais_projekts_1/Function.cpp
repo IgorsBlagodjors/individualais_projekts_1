@@ -16,7 +16,10 @@ void arrayExtension(T*& arr, int& size, int& capacity, const T& element) {
     if (size >= capacity) {
         int newCapacity = (capacity == 0) ? 4 : capacity * 2;
         T* temp = new T[newCapacity];
-        for (int i = 0; i < size; ++i) temp[i] = arr[i];
+
+        for (int i = 0; i < size; ++i)
+            temp[i] = arr[i];
+
         delete[] arr;
         arr = temp;
         capacity = newCapacity;
@@ -49,9 +52,8 @@ void deleteItem(T*& arr, int& size, void (*displayFunc)(const T*, int), const ch
     }
 
     // Shift elements to remove selected
-    for (int i = index - 1; i < size - 1; ++i) {
+    for (int i = index - 1; i < size - 1; ++i)
         arr[i] = arr[i + 1];
-    }
 
     size--;
     cout << "\033[32mItem deleted successfully!\033[0m\n";
@@ -96,16 +98,18 @@ static string dateValidCheck(const string& dateInput) {
 
 // Search receipts based on criteria
 static void searchReceipts(Receipt* receipts, int count) {
+    cout << "\n=== Search Receipts ===\n";
+
     int inputCardNumber;
     double minPrice, maxPrice;
     string categoryStr;
 
-    cout << "\n=== Search Receipts ===\n";
-
     cout << "Enter card number (0 to skip): ";
     cin >> inputCardNumber;
+
     cout << "Enter min total price (or -1 to skip): ";
     cin >> minPrice;
+
     cout << "Enter max total price (or -1 to skip): ";
     cin >> maxPrice;
     cin.ignore();
@@ -115,6 +119,7 @@ static void searchReceipts(Receipt* receipts, int count) {
 
     bool categoryFilter = false;
     Category category;
+
     if (!categoryStr.empty()) {
         category = charToCategory(categoryStr);
         categoryFilter = true;
@@ -127,16 +132,15 @@ static void searchReceipts(Receipt* receipts, int count) {
         bool match = true;
 
         // 1. Filter by card number
-        if (inputCardNumber != 0 && r.card.cardNumber != inputCardNumber) {
+        if (inputCardNumber != 0 && r.card.cardNumber != inputCardNumber)
             match = false;
-        }
 
-        // Filter by total price
+        // 2. Filter by total price
         double total = r.getTotalWithDiscount();
         if (minPrice >= 0 && total < minPrice) match = false;
         if (maxPrice >= 0 && total > maxPrice) match = false;
 
-        // Filter by category
+        // 3. Filter by category
         if (categoryFilter) {
             bool categoryFound = false;
             for (const auto& item : r.items) {
@@ -148,9 +152,8 @@ static void searchReceipts(Receipt* receipts, int count) {
             if (!categoryFound) match = false;
         }
 
-        if (match) {
+        if (match)
             foundReceipts.push_back(r);
-        }
     }
 
     if (foundReceipts.empty()) {
@@ -178,17 +181,19 @@ static void saveAndExit() {
 
 // Deduct purchased quantity from stock
 static bool deductStock(int productCode, int quantity) {
-    for (int i = 0; i < loadedProductCount; i++) {
+    for (int i = 0; i < loadedProductCount; ++i) {
         if (loadedProducts[i].code == productCode) {
             if (quantity > loadedProducts[i].quantityInStock) {
                 cout << "\033[31mNot enough stock for " << loadedProducts[i].name
                     << "! Available: " << loadedProducts[i].quantityInStock << "\033[0m\n";
                 return false;
             }
+
             loadedProducts[i].quantityInStock -= quantity;
             return true;
         }
     }
+
     cout << "\033[31mProduct with code " << productCode << " not found!\033[0m\n";
     return false;
 }
@@ -199,7 +204,8 @@ static bool deductStock(int productCode, int quantity) {
 void saveProducts(const Product* arr, int size, const char* filename) {
     ofstream file(filename);
     file << "[\n";
-    for (int i = 0; i < size; i++) {
+
+    for (int i = 0; i < size; ++i) {
         file << "  {\n"
             << "    \"code\": " << arr[i].code << ",\n"
             << "    \"name\": \"" << arr[i].name << "\",\n"
@@ -210,15 +216,17 @@ void saveProducts(const Product* arr, int size, const char* filename) {
         if (i < size - 1) file << ",";
         file << "\n";
     }
+
     file << "]";
-    cout << "\033[32mSaved " << size << " products to " << filename << "!\033[0m" << endl;
+    cout << "\033[32mSaved " << size << " products to " << filename << "!\033[0m\n";
 }
 
-// Save employees to a JSON file
+// Save employees to JSON file
 void saveEmployees(const Employee* arr, int size, const char* filename) {
     ofstream file(filename);
     file << "[\n";
-    for (int i = 0; i < size; i++) {
+
+    for (int i = 0; i < size; ++i) {
         file << "  {\n"
             << "    \"id\": " << arr[i].id << ",\n"
             << "    \"firstName\": \"" << arr[i].firstName << "\",\n"
@@ -228,15 +236,17 @@ void saveEmployees(const Employee* arr, int size, const char* filename) {
         if (i < size - 1) file << ",";
         file << "\n";
     }
+
     file << "]";
-    cout << "\033[32mSaved " << size << " employees to " << filename << "!\033[0m" << endl;
+    cout << "\033[32mSaved " << size << " employees to " << filename << "!\033[0m\n";
 }
 
-// Save discount cards to a JSON file
+// Save discount cards to JSON file
 void saveDiscountCards(const DiscountCard* arr, int size, const char* filename) {
     ofstream file(filename);
     file << "[\n";
-    for (int i = 0; i < size; i++) {
+
+    for (int i = 0; i < size; ++i) {
         file << "  {\n"
             << "    \"cardNumber\": " << arr[i].cardNumber << ",\n"
             << "    \"ownerFirstName\": \"" << arr[i].ownerFirstName << "\",\n"
@@ -246,11 +256,12 @@ void saveDiscountCards(const DiscountCard* arr, int size, const char* filename) 
         if (i < size - 1) file << ",";
         file << "\n";
     }
+
     file << "]";
-    cout << "\033[32mSaved " << size << " discount cards to " << filename << "!\033[0m" << endl;
+    cout << "\033[32mSaved " << size << " discount cards to " << filename << "!\033[0m\n";
 }
 
-// Save receipts to a JSON file
+// Save receipts to JSON file
 void saveReceipts(const Receipt* arr, int size, const char* filename) {
     ofstream file(filename);
     if (!file.is_open()) {
@@ -259,41 +270,42 @@ void saveReceipts(const Receipt* arr, int size, const char* filename) {
     }
 
     file << "[\n";
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size; ++i) {
         const Receipt& r = arr[i];
         double totalNoDiscount = r.getTotalNoDiscount();
         double totalWithDiscount = r.getTotalWithDiscount();
         double vat = r.getVAT();
 
-        file << "  {\n";
-        file << "    \"receiptNumber\": " << r.receiptNumber << ",\n";
-        file << "    \"date\": \"" << r.date << "\",\n";
-        file << "    \"discountCard\": " << r.card.cardNumber << ",\n";
+        file << "  {\n"
+            << "    \"receiptNumber\": " << r.receiptNumber << ",\n"
+            << "    \"date\": \"" << r.date << "\",\n"
+            << "    \"discountCard\": " << r.card.cardNumber << ",\n"
+            << "    \"items\": [\n";
 
-        // Product vector
-        file << "    \"items\": [\n";
-        for (size_t j = 0; j < r.items.size(); j++) {
+        for (size_t j = 0; j < r.items.size(); ++j) {
             const auto& item = r.items[j];
-            file << "      {\n";
-            file << "        \"productName\": \"" << item.product.name << "\",\n";
-            file << "        \"productCode\": " << item.product.code << ",\n";
-            file << "        \"quantity\": " << item.quantity << ",\n";
-            file << "        \"price\": " << item.product.price << "\n";
-            file << "      }";
+            file << "      {\n"
+                << "        \"productName\": \"" << item.product.name << "\",\n"
+                << "        \"productCode\": " << item.product.code << ",\n"
+                << "        \"quantity\": " << item.quantity << ",\n"
+                << "        \"price\": " << item.product.price << "\n"
+                << "      }";
             if (j < r.items.size() - 1) file << ",";
             file << "\n";
         }
-        file << "    ],\n";
-        file << "    \"total_no_discount\": " << totalNoDiscount << ",\n";
-        file << "    \"total_with_discount\": " << totalWithDiscount << ",\n";
-        file << "    \"VAT\": " << vat << "\n";
-        file << "  }";
+
+        file << "    ],\n"
+            << "    \"total_no_discount\": " << totalNoDiscount << ",\n"
+            << "    \"total_with_discount\": " << totalWithDiscount << ",\n"
+            << "    \"VAT\": " << vat << "\n"
+            << "  }";
         if (i < size - 1) file << ",";
         file << "\n";
     }
-    file << "]\n";
 
+    file << "]\n";
     file.close();
+
     cout << "\033[32mSaved " << size << " receipts to " << filename << "!\033[0m\n";
 }
 
@@ -321,9 +333,7 @@ void loadProducts(const char* filename, Product*& arr, int& size, int& capacity)
         if (!inObject) continue;
 
         if (line.find("\"code\"") != string::npos) {
-            int code;
-            sscanf_s(line.c_str(), "    \"code\": %d,", &code);
-            current.code = code;
+            sscanf_s(line.c_str(), "    \"code\": %d,", &current.code);
         }
         else if (line.find("\"name\"") != string::npos) {
             size_t start = line.find('"', 12) + 1;
@@ -332,14 +342,10 @@ void loadProducts(const char* filename, Product*& arr, int& size, int& capacity)
             strcpy_s(current.name, sizeof(current.name), name.c_str());
         }
         else if (line.find("\"price\"") != string::npos) {
-            double price;
-            sscanf_s(line.c_str(), "    \"price\": %lf,", &price);
-            current.price = price;
+            sscanf_s(line.c_str(), "    \"price\": %lf,", &current.price);
         }
         else if (line.find("\"quantityInStock\"") != string::npos) {
-            int qty;
-            sscanf_s(line.c_str(), "    \"quantityInStock\": %d,", &qty);
-            current.quantityInStock = qty;
+            sscanf_s(line.c_str(), "    \"quantityInStock\": %d,", &current.quantityInStock);
         }
         else if (line.find("\"category\"") != string::npos) {
             size_t start = line.find('"', 14) + 1;
@@ -378,27 +384,22 @@ void loadEmployees(const char* filename, Employee*& arr, int& size, int& capacit
         if (!inObject) continue;
 
         if (line.find("\"id\"") != string::npos) {
-            int id;
-            sscanf_s(line.c_str(), "    \"id\": %d,", &id);
-            current.id = id;
+            sscanf_s(line.c_str(), "    \"id\": %d,", &current.id);
         }
         else if (line.find("\"firstName\"") != string::npos) {
-            size_t colon = line.find(':');
-            size_t start = line.find('"', colon) + 1;
+            size_t start = line.find('"', line.find(':')) + 1;
             size_t end = line.find('"', start);
             string s = line.substr(start, end - start);
             strncpy_s(current.firstName, sizeof(current.firstName), s.c_str(), _TRUNCATE);
         }
         else if (line.find("\"lastName\"") != string::npos) {
-            size_t colon = line.find(':');
-            size_t start = line.find('"', colon) + 1;
+            size_t start = line.find('"', line.find(':')) + 1;
             size_t end = line.find('"', start);
             string s = line.substr(start, end - start);
             strncpy_s(current.lastName, sizeof(current.lastName), s.c_str(), _TRUNCATE);
         }
         else if (line.find("\"department\"") != string::npos) {
-            size_t colon = line.find(':');
-            size_t start = line.find('"', colon) + 1;
+            size_t start = line.find('"', line.find(':')) + 1;
             size_t end = line.find('"', start);
             string dep = line.substr(start, end - start);
             current.department = charToCategory(dep);
@@ -434,27 +435,22 @@ void loadDiscountCards(const char* filename, DiscountCard*& arr, int& size, int&
         if (!inObject) continue;
 
         if (line.find("\"cardNumber\"") != string::npos) {
-            int num;
-            sscanf_s(line.c_str(), "    \"cardNumber\": %d,", &num);
-            current.cardNumber = num;
+            sscanf_s(line.c_str(), "    \"cardNumber\": %d,", &current.cardNumber);
         }
         else if (line.find("\"ownerFirstName\"") != string::npos) {
-            size_t colon = line.find(':');
-            size_t start = line.find('"', colon) + 1;
+            size_t start = line.find('"', line.find(':')) + 1;
             size_t end = line.find('"', start);
             string s = line.substr(start, end - start);
             strcpy_s(current.ownerFirstName, sizeof(current.ownerFirstName), s.c_str());
         }
         else if (line.find("\"ownerLastName\"") != string::npos) {
-            size_t colon = line.find(':');
-            size_t start = line.find('"', colon) + 1;
+            size_t start = line.find('"', line.find(':')) + 1;
             size_t end = line.find('"', start);
             string s = line.substr(start, end - start);
             strcpy_s(current.ownerLastName, sizeof(current.ownerLastName), s.c_str());
         }
         else if (line.find("\"type\"") != string::npos) {
-            size_t colon = line.find(':');
-            size_t start = line.find('"', colon) + 1;
+            size_t start = line.find('"', line.find(':')) + 1;
             size_t end = line.find('"', start);
             string t = line.substr(start, end - start);
             current.type = charToCardType(t);
@@ -469,11 +465,13 @@ void loadDiscountCards(const char* filename, DiscountCard*& arr, int& size, int&
 }
 
 // Load receipts from JSON file
-void loadReceipts(const char* filename, Receipt*& arr, int& size,
+void loadReceipts(
+    const char* filename,
+    Receipt*& arr, int& size,
     Product* products, int productSize,
     DiscountCard* cards, int cardSize,
-    int& capacity) {
-
+    int& capacity
+) {
     ifstream file(filename);
     if (!file.is_open()) {
         cout << "\033[31mFile " << filename << " not found!\033[0m\n";
@@ -483,7 +481,7 @@ void loadReceipts(const char* filename, Receipt*& arr, int& size,
 
     size = 0;
     string line;
-    Receipt current;
+    Receipt current{};
     bool inReceipt = false;
     bool inItems = false;
 
@@ -498,13 +496,10 @@ void loadReceipts(const char* filename, Receipt*& arr, int& size,
         if (!inReceipt) continue;
 
         if (line.find("\"receiptNumber\"") != string::npos) {
-            int num;
-            sscanf_s(line.c_str(), "    \"receiptNumber\": %d,", &num);
-            current.receiptNumber = num;
+            sscanf_s(line.c_str(), "    \"receiptNumber\": %d,", &current.receiptNumber);
         }
         else if (line.find("\"date\"") != string::npos) {
-            size_t colon = line.find(':');
-            size_t start = line.find('"', colon) + 1;
+            size_t start = line.find('"', line.find(':')) + 1;
             size_t end = line.find('"', start);
             string s = line.substr(start, end - start);
             strcpy_s(current.date, sizeof(current.date), s.c_str());
@@ -520,16 +515,15 @@ void loadReceipts(const char* filename, Receipt*& arr, int& size,
             }
         }
         else if (line.find("\"items\"") != string::npos) {
-            inItems = true; 
+            inItems = true;
             continue;
         }
         else if (inItems) {
-            if (line.find(']') != string::npos) { 
+            if (line.find(']') != string::npos) {
                 inItems = false;
             }
-            else if (line.find('{') != string::npos) { 
-                PurchasedProduct  item;
-                
+            else if (line.find('{') != string::npos) {
+                PurchasedProduct item{};
                 string pname, pcodeLine, qtyLine, priceLine;
 
                 getline(file, pname);
@@ -537,12 +531,10 @@ void loadReceipts(const char* filename, Receipt*& arr, int& size,
                 getline(file, qtyLine);
                 getline(file, priceLine);
 
-                
                 size_t start = pname.find('"', pname.find(':')) + 1;
                 size_t end = pname.find('"', start);
                 string productName = pname.substr(start, end - start);
 
-                
                 for (int i = 0; i < productSize; ++i) {
                     if (products[i].name == productName) {
                         item.product = products[i];
@@ -550,10 +542,7 @@ void loadReceipts(const char* filename, Receipt*& arr, int& size,
                     }
                 }
 
-                int qty;
-                sscanf_s(qtyLine.c_str(), "        \"quantity\": %d,", &qty);
-                item.quantity = qty;
-
+                sscanf_s(qtyLine.c_str(), "        \"quantity\": %d,", &item.quantity);
                 current.items.push_back(item);
             }
         }
@@ -568,7 +557,7 @@ void loadReceipts(const char* filename, Receipt*& arr, int& size,
     cout << "\033[32mLoaded " << size << " receipts from " << filename << "\033[0m\n";
 }
 
-// =============================== ADD FUNCTIONS =============================== // 
+// =============================== ADD FUNCTIONS =============================== //
 
 // Add Product
 static void addProduct() {
@@ -692,7 +681,7 @@ static void addDiscountCard() {
     cout << "\033[32mDiscount card added!\033[0m\n";
 }
 
-// Add Receipt 
+// Add Receipt
 static void addReceipt() {
     Receipt receipt;
     cout << "\n=== ADD NEW RECEIPT ===\n";
@@ -705,6 +694,7 @@ static void addReceipt() {
         cout << "\033[31mInvalid input. Enter a number: \033[0m";
     }
     cin.ignore();
+
     if (receipt.receiptNumber == 0) {
         cout << "\033[33mAdd receipt cancelled.\033[0m\n";
         return;
@@ -990,6 +980,7 @@ static void editReceipt(Receipt* arr, int size) {
                     cout << j + 1 << ". " << arr[i].items[j].product.name
                         << " (Qty: " << arr[i].items[j].quantity << ")\n";
                 }
+
                 cout << "Enter product number to edit (0 to finish, -1 to add new): ";
                 int prodChoice;
                 while (!(cin >> prodChoice)) {
@@ -1058,13 +1049,13 @@ static void editReceipt(Receipt* arr, int size) {
                     int prodIndex = -1;
                     if (!input.empty()) {
                         int newIndex = stoi(input);
-
                         if (newIndex >= 1 && newIndex <= loadedProductCount) {
                             item.product = loadedProducts[newIndex - 1];
                             prodIndex = newIndex - 1;
                         }
                         else {
-                            cout << "\033[31mInvalid index! Must be 1-" << loadedProductCount << ". Keeping old product.\033[0m\n";
+                            cout << "\033[31mInvalid index! Must be 1-" << loadedProductCount
+                                << ". Keeping old product.\033[0m\n";
                         }
                     }
                     else {
@@ -1082,6 +1073,7 @@ static void editReceipt(Receipt* arr, int size) {
                         cout << "Enter new quantity (" << item.quantity << "): ";
                         getline(cin, input);
                         if (input.empty()) break;
+
                         int newQty = stoi(input);
                         if (deductStock(item.product.code, newQty)) {
                             item.quantity = newQty;
@@ -1096,7 +1088,8 @@ static void editReceipt(Receipt* arr, int size) {
 
             // Edit discount card
             displayDiscountCards(loadedCards, loadedCardCount);
-            cout << "Enter new discount card number (" << arr[i].card.cardNumber << ") or press Enter to keep: ";
+            cout << "Enter new discount card number (" << arr[i].card.cardNumber
+                << ") or press Enter to keep: ";
             getline(cin, input);
             if (!input.empty()) {
                 int cardNum = stoi(input);
@@ -1408,7 +1401,6 @@ void runProgramMenu() {
             } while (sortChoice != 6);
             break;
         }
-
         case 7: 
             // Save and Exit
             saveAndExit();
