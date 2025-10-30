@@ -110,52 +110,44 @@ void displayReceipts(const Receipt* arr, int size) {
         return;
     }
 
-    cout << "\033[32m============= RECEIPTS (PART 1: General Info) ==================\033[0m" << endl;
-    cout << left
-        << setw(5) << "N"
-        << setw(12) << "Receipt#"
-        << setw(12) << "Date"
-        << setw(25) << "Product"
-        << setw(8) << "Qty"
-        << setw(10) << "Price"
-        << endl;
-    cout << "----------------------------------------------------------------" << endl;
-
     for (int i = 0; i < size; i++) {
+        cout << "\033[32m================ RECEIPT #" << arr[i].receiptNumber
+            << " =================\033[0m" << endl;
+        cout << "Date: " << arr[i].date << endl;
+        cout << "-----------------------------------------------" << endl;
+
+        // Заголовок товаров
         cout << left
-            << setw(5) << i + 1
-            << setw(12) << arr[i].receiptNumber
-            << setw(12) << arr[i].date
-            << setw(25) << arr[i].product.name
-            << setw(8) << arr[i].quantity
-            << setw(10) << fixed << setprecision(2) << arr[i].product.price
+            << setw(5) << "N"
+            << setw(25) << "Product"
+            << setw(8) << "Qty"
+            << setw(10) << "Price"
             << endl;
-    }
+        cout << "-----------------------------------------------" << endl;
 
-    cout << "=================================================================" << endl;
-    cout << endl;
+        // Сами товары
+        for (size_t j = 0; j < arr[i].items.size(); j++) {
+            const PurchasedProduct& item = arr[i].items[j];
+            cout << left
+                << setw(5) << j + 1
+                << setw(25) << item.product.name
+                << setw(8) << item.quantity
+                << setw(10) << fixed << setprecision(2) << item.product.price
+                << endl;
+        }
 
-    cout << "\033[32m========== RECEIPTS (PART 2: Totals and Card Info) ===============\033[0m" << endl;
-    cout << left
-        << setw(5) << "N"
-        << setw(12) << "Receipt#"
-        << setw(16) << "Total (no disc)"
-        << setw(16) << "Total (disc)"
-        << setw(10) << "VAT"
-        << setw(15) << "Card#"
-        << endl;
-    cout << "----------------------------------------------------------------" << endl;
+        cout << "-----------------------------------------------" << endl;
 
-    for (int i = 0; i < size; i++) {
+        // Итоги
         cout << left
-            << setw(5) << i + 1
-            << setw(12) << arr[i].receiptNumber
-            << setw(16) << fixed << setprecision(2) << arr[i].getTotalNoDiscount()
-            << setw(16) << fixed << setprecision(2) << arr[i].getTotalWithDiscount()
-            << setw(10) << fixed << setprecision(2) << arr[i].getVAT()
-            << setw(15) << arr[i].card.cardNumber
-            << endl;
-    }
+            << setw(20) << "Total (no disc):" << setw(10) << fixed << setprecision(2) << arr[i].getTotalNoDiscount() << endl;
+        cout << left
+            << setw(20) << "Total (with disc):" << setw(10) << fixed << setprecision(2) << arr[i].getTotalWithDiscount() << endl;
+        cout << left
+            << setw(20) << "VAT:" << setw(10) << fixed << setprecision(2) << arr[i].getVAT() << endl;
+        cout << left
+            << setw(20) << "Card number:" << setw(15) << arr[i].card.cardNumber << endl;
 
-    cout << "=================================================================" << endl;
+        cout << "================================================\n\n";
+    }
 }

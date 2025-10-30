@@ -1,7 +1,6 @@
 #include "globals.h"
 
 // ======================= Initial Data =======================
-
 Product initialProducts[20] = {
     {1001, "Arabica Coffee 250g", 4.99, 50, Category::Food},
     {1002, "Green Tea", 3.49, 80, Category::Food},
@@ -41,10 +40,43 @@ Employee initialEmployees[5] = {
 };
 
 Receipt defaultReceipts[4] = {
-    {5001, initialCards[0], initialProducts[0], 2, "2025-09-30"},
-    {5002, initialCards[1], initialProducts[7], 1, "2025-10-01"},
-    {5003, initialCards[2], initialProducts[10], 3, "2025-10-02"},
-    {5004, initialCards[3], initialProducts[18], 5, "2025-10-03"}
+    {
+        5001,
+        initialCards[0],
+        {
+            { initialProducts[0], 2 },
+            { initialProducts[16], 1 },
+            { initialProducts[17], 3 }
+        },
+        "2025-09-30"
+    },
+    {
+        5002,
+        initialCards[1],
+        {
+            { initialProducts[7], 1 },
+            { initialProducts[8], 1 }
+        },
+        "2025-10-01"
+    },
+    {
+        5003,
+        initialCards[2],
+        {
+            { initialProducts[10], 3 },
+            { initialProducts[11], 1 }
+        },
+        "2025-10-02"
+    },
+    {
+        5004,
+        initialCards[3],
+        {
+            { initialProducts[18], 5 },
+            { initialProducts[19], 2 }
+        },
+        "2025-10-03"
+    }
 };
 
 // ======================= Dynamic Arrays =======================

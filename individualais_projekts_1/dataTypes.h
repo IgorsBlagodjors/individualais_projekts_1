@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <string>
+#include <vector>
 using namespace std;
 
 enum struct Category : int {
@@ -83,15 +84,25 @@ struct Employee {
     Category department;
 };
 
+struct PurchasedProduct {
+    Product product;
+    int quantity;
+};
+
 struct Receipt {
     int receiptNumber;
     DiscountCard card;
-    Product product;
-    int quantity;
-    char date[12];
+    vector<PurchasedProduct > items;
+    char date[12];   
+
+
+    // =============================== PROGRAMM CALCULATIONS ===============================
 
     double getTotalNoDiscount() const {
-        return product.price * quantity;
+        double total = 0.0;
+        for (const auto& item : items)
+            total += item.product.price * item.quantity;
+        return total;
     }
 
     double getTotalWithDiscount() const {

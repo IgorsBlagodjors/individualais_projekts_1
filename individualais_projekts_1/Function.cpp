@@ -6,92 +6,7 @@
 #include <iostream>
 #include "dataView.h"
 #include "globals.h"
-#include "vector"
 using namespace std;
-
-// =============================== SAVE FUNCTIONS ===============================
-
-// Save products to JSON file
-void saveProducts(const Product* arr, int size, const char* filename) {
-    ofstream file(filename);
-    file << "[\n";
-    for (int i = 0; i < size; i++) {
-        file << "  {\n"
-            << "    \"code\": " << arr[i].code << ",\n"
-            << "    \"name\": \"" << arr[i].name << "\",\n"
-            << "    \"price\": " << arr[i].price << ",\n"
-            << "    \"quantityInStock\": " << arr[i].quantityInStock << ",\n"
-            << "    \"category\": \"" << categoryToChar(arr[i].category) << "\"\n"
-            << "  }";
-        if (i < size - 1) file << ",";
-        file << "\n";
-    }
-    file << "]";
-    cout << "\033[32mSaved " << size << " products to " << filename << "!\033[0m" << endl;
-}
-
-// Save employees to a JSON file
-void saveEmployees(const Employee* arr, int size, const char* filename) {
-    ofstream file(filename);
-    file << "[\n";
-    for (int i = 0; i < size; i++) {
-        file << "  {\n"
-            << "    \"id\": " << arr[i].id << ",\n"
-            << "    \"firstName\": \"" << arr[i].firstName << "\",\n"
-            << "    \"lastName\": \"" << arr[i].lastName << "\",\n"
-            << "    \"department\": \"" << categoryToChar(arr[i].department) << "\"\n"
-            << "  }";
-        if (i < size - 1) file << ",";
-        file << "\n";
-    }
-    file << "]";
-    cout << "\033[32mSaved " << size << " employees to " << filename << "!\033[0m" << endl;
-}
-
-// Save discount cards to a JSON file
-void saveDiscountCards(const DiscountCard* arr, int size, const char* filename) {
-    ofstream file(filename);
-    file << "[\n";
-    for (int i = 0; i < size; i++) {
-        file << "  {\n"
-            << "    \"cardNumber\": " << arr[i].cardNumber << ",\n"
-            << "    \"ownerFirstName\": \"" << arr[i].ownerFirstName << "\",\n"
-            << "    \"ownerLastName\": \"" << arr[i].ownerLastName << "\",\n"
-            << "    \"type\": \"" << cardToChar(arr[i].type) << "\"\n"
-            << "  }";
-        if (i < size - 1) file << ",";
-        file << "\n";
-    }
-    file << "]";
-    cout << "\033[32mSaved " << size << " discount cards to " << filename << "!\033[0m" << endl;
-}
-
-// Save receipts to a JSON file
-void saveReceipts(const Receipt* arr, int size, const char* filename) {
-    ofstream file(filename);
-    file << "[\n";
-    for (int i = 0; i < size; i++) {
-        double totalNoDiscount = arr[i].getTotalNoDiscount();
-        double totalWithDiscount = arr[i].getTotalWithDiscount();
-        double vat = arr[i].getVAT();
-
-        file << "  {\n"
-            << "    \"receiptNumber\": " << arr[i].receiptNumber << ",\n"
-            << "    \"date\": \"" << arr[i].date << "\",\n"
-            << "    \"product\": \"" << arr[i].product.name << "\",\n"
-            << "    \"quantity\": " << arr[i].quantity << ",\n"
-            << "    \"price\": " << arr[i].product.price << ",\n"
-            << "    \"total_no_discount\": " << totalNoDiscount << ",\n"
-            << "    \"total_with_discount\": " << totalWithDiscount << ",\n"
-            << "    \"VAT\": " << vat << ",\n"
-            << "    \"discountCard\": \"" << arr[i].card.cardNumber << "\"\n"
-            << "  }";
-        if (i < size - 1) file << ",";
-        file << "\n";
-    }
-    file << "]";
-    cout << "\033[32mSaved " << size << " receipts to " << filename << "!\033[0m" << endl;
-}
 
 // =============================== HELPER FUNCTIONS ===============================
 
@@ -181,46 +96,61 @@ static string dateValidCheck(const string& dateInput) {
 
 // Search receipts based on criteria
 static void searchReceipts(Receipt* receipts, int count) {
-    int inputNumber;
+    int inputCardNumber;
     double minPrice, maxPrice;
     string categoryStr;
-    vector<Receipt> foundReceipts;
 
     cout << "\n=== Search Receipts ===\n";
 
     cout << "Enter card number (0 to skip): ";
-    cin >> inputNumber;
-    cout << "Enter min price (or -1 to skip): ";
+    cin >> inputCardNumber;
+    cout << "Enter min total price (or -1 to skip): ";
     cin >> minPrice;
-    cout << "Enter max price (or -1 to skip): ";
+    cout << "Enter max total price (or -1 to skip): ";
     cin >> maxPrice;
     cin.ignore();
 
     cout << "Enter product category (Food, Clothes, Electronics, Books, HomeAndGarden or leave empty): ";
     getline(cin, categoryStr);
 
-    Category category;
     bool categoryFilter = false;
+    Category category;
     if (!categoryStr.empty()) {
         category = charToCategory(categoryStr);
         categoryFilter = true;
     }
 
-    vector<Receipt> found;
+    vector<Receipt> foundReceipts;
 
     for (int i = 0; i < count; ++i) {
         const Receipt& r = receipts[i];
         bool match = true;
 
-        if (inputNumber != 0 && r.card.cardNumber != inputNumber) match = false;
+        // 1. Filter by card number
+        if (inputCardNumber != 0 && r.card.cardNumber != inputCardNumber) {
+            match = false;
+        }
 
+        // Filter by total price
         double total = r.getTotalWithDiscount();
         if (minPrice >= 0 && total < minPrice) match = false;
         if (maxPrice >= 0 && total > maxPrice) match = false;
 
-        if (categoryFilter && r.product.category != category) match = false;
+        // Filter by category
+        if (categoryFilter) {
+            bool categoryFound = false;
+            for (const auto& item : r.items) {
+                if (item.product.category == category) {
+                    categoryFound = true;
+                    break;
+                }
+            }
+            if (!categoryFound) match = false;
+        }
 
-        if (match) foundReceipts.push_back(r);
+        if (match) {
+            foundReceipts.push_back(r);
+        }
     }
 
     if (foundReceipts.empty()) {
@@ -246,112 +176,125 @@ static void saveAndExit() {
     saveReceipts(loadedReceipts, loadedReceiptCount, "Receipts.json");
 }
 
-
-// =============================== SORT FUNCTIONS ===============================
-
-// By name
-static void sortProductsByName(Product* arr, int size) {
-    if (size == 0) {
-        cout << "\033[31mNo products to display.\033[0m\n";
-        return;
-    }
-
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = 0; j < size - i - 1; j++) {
-            if (std::string(arr[j].name) > std::string(arr[j + 1].name)) {
-                Product temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
+// Deduct purchased quantity from stock
+static bool deductStock(int productCode, int quantity) {
+    for (int i = 0; i < loadedProductCount; i++) {
+        if (loadedProducts[i].code == productCode) {
+            if (quantity > loadedProducts[i].quantityInStock) {
+                cout << "\033[31mNot enough stock for " << loadedProducts[i].name
+                    << "! Available: " << loadedProducts[i].quantityInStock << "\033[0m\n";
+                return false;
             }
+            loadedProducts[i].quantityInStock -= quantity;
+            return true;
         }
     }
-
-    displayProducts(loadedProducts, loadedProductCount);
-    cout << "\033[32mProduct sorted successfully!\033[0m\n";
+    cout << "\033[31mProduct with code " << productCode << " not found!\033[0m\n";
+    return false;
 }
 
-// By price ascending
-static void sortProductsByPriceAscending(Product* arr, int size) {
-    if (size == 0) {
-        cout << "\033[31mNo products to display.\033[0m\n";
-        return;
-    }
+// =============================== SAVE FUNCTIONS ===============================
 
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = 0; j < size - i - 1; j++) {
-            if (arr[j].price > arr[j + 1].price) {
-                Product temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
+// Save products to JSON file
+void saveProducts(const Product* arr, int size, const char* filename) {
+    ofstream file(filename);
+    file << "[\n";
+    for (int i = 0; i < size; i++) {
+        file << "  {\n"
+            << "    \"code\": " << arr[i].code << ",\n"
+            << "    \"name\": \"" << arr[i].name << "\",\n"
+            << "    \"price\": " << arr[i].price << ",\n"
+            << "    \"quantityInStock\": " << arr[i].quantityInStock << ",\n"
+            << "    \"category\": \"" << categoryToChar(arr[i].category) << "\"\n"
+            << "  }";
+        if (i < size - 1) file << ",";
+        file << "\n";
     }
-
-    displayProducts(loadedProducts, loadedProductCount);
-    cout << "\033[32mProduct sorted successfully!\033[0m\n";
+    file << "]";
+    cout << "\033[32mSaved " << size << " products to " << filename << "!\033[0m" << endl;
 }
 
-// By price descending
-static void sortProductsByPriceDescending(Product* arr, int size) {
-    if (size == 0) {
-        cout << "\033[31mNo products to display.\033[0m\n";
-        return;
+// Save employees to a JSON file
+void saveEmployees(const Employee* arr, int size, const char* filename) {
+    ofstream file(filename);
+    file << "[\n";
+    for (int i = 0; i < size; i++) {
+        file << "  {\n"
+            << "    \"id\": " << arr[i].id << ",\n"
+            << "    \"firstName\": \"" << arr[i].firstName << "\",\n"
+            << "    \"lastName\": \"" << arr[i].lastName << "\",\n"
+            << "    \"department\": \"" << categoryToChar(arr[i].department) << "\"\n"
+            << "  }";
+        if (i < size - 1) file << ",";
+        file << "\n";
     }
-
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = 0; j < size - i - 1; j++) {
-            if (arr[j].price < arr[j + 1].price) {
-                Product temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
-
-    displayProducts(loadedProducts, loadedProductCount);
-    cout << "\033[32mProduct sorted successfully!\033[0m\n";
+    file << "]";
+    cout << "\033[32mSaved " << size << " employees to " << filename << "!\033[0m" << endl;
 }
 
-// By quantity ascending
-static void sortProductsByQuantityAscending(Product* arr, int size) {
-    if (size == 0) {
-        cout << "\033[31mNo products to display.\033[0m\n";
-        return;
+// Save discount cards to a JSON file
+void saveDiscountCards(const DiscountCard* arr, int size, const char* filename) {
+    ofstream file(filename);
+    file << "[\n";
+    for (int i = 0; i < size; i++) {
+        file << "  {\n"
+            << "    \"cardNumber\": " << arr[i].cardNumber << ",\n"
+            << "    \"ownerFirstName\": \"" << arr[i].ownerFirstName << "\",\n"
+            << "    \"ownerLastName\": \"" << arr[i].ownerLastName << "\",\n"
+            << "    \"type\": \"" << cardToChar(arr[i].type) << "\"\n"
+            << "  }";
+        if (i < size - 1) file << ",";
+        file << "\n";
     }
-
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = 0; j < size - i - 1; j++) {
-            if (arr[j].quantityInStock > arr[j + 1].quantityInStock) {
-                Product temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
-
-    displayProducts(loadedProducts, loadedProductCount);
-    cout << "\033[32mProduct sorted successfully!\033[0m\n";
+    file << "]";
+    cout << "\033[32mSaved " << size << " discount cards to " << filename << "!\033[0m" << endl;
 }
 
-// By quantity descending
-static void sortProductsByQuantityDescending(Product* arr, int size) {
-    if (size == 0) {
-        cout << "\033[31mNo products to display.\033[0m\n";
+// Save receipts to a JSON file
+void saveReceipts(const Receipt* arr, int size, const char* filename) {
+    ofstream file(filename);
+    if (!file.is_open()) {
+        cerr << "\033[31mError: cannot open file " << filename << " for writing.\033[0m\n";
         return;
     }
 
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = 0; j < size - i - 1; j++) {
-            if (arr[j].quantityInStock < arr[j + 1].quantityInStock) {
-                Product temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
+    file << "[\n";
+    for (int i = 0; i < size; i++) {
+        const Receipt& r = arr[i];
+        double totalNoDiscount = r.getTotalNoDiscount();
+        double totalWithDiscount = r.getTotalWithDiscount();
+        double vat = r.getVAT();
 
-    displayProducts(loadedProducts, loadedProductCount);
-    cout << "\033[32mProduct sorted successfully!\033[0m\n";
+        file << "  {\n";
+        file << "    \"receiptNumber\": " << r.receiptNumber << ",\n";
+        file << "    \"date\": \"" << r.date << "\",\n";
+        file << "    \"discountCard\": " << r.card.cardNumber << ",\n";
+
+        // Product vector
+        file << "    \"items\": [\n";
+        for (size_t j = 0; j < r.items.size(); j++) {
+            const auto& item = r.items[j];
+            file << "      {\n";
+            file << "        \"productName\": \"" << item.product.name << "\",\n";
+            file << "        \"productCode\": " << item.product.code << ",\n";
+            file << "        \"quantity\": " << item.quantity << ",\n";
+            file << "        \"price\": " << item.product.price << "\n";
+            file << "      }";
+            if (j < r.items.size() - 1) file << ",";
+            file << "\n";
+        }
+        file << "    ],\n";
+        file << "    \"total_no_discount\": " << totalNoDiscount << ",\n";
+        file << "    \"total_with_discount\": " << totalWithDiscount << ",\n";
+        file << "    \"VAT\": " << vat << "\n";
+        file << "  }";
+        if (i < size - 1) file << ",";
+        file << "\n";
+    }
+    file << "]\n";
+
+    file.close();
+    cout << "\033[32mSaved " << size << " receipts to " << filename << "!\033[0m\n";
 }
 
 // =============================== LOAD FUNCTIONS ===============================
@@ -530,6 +473,7 @@ void loadReceipts(const char* filename, Receipt*& arr, int& size,
     Product* products, int productSize,
     DiscountCard* cards, int cardSize,
     int& capacity) {
+
     ifstream file(filename);
     if (!file.is_open()) {
         cout << "\033[31mFile " << filename << " not found!\033[0m\n";
@@ -539,15 +483,19 @@ void loadReceipts(const char* filename, Receipt*& arr, int& size,
 
     size = 0;
     string line;
-    Receipt current{};
-    bool inObject = false;
+    Receipt current;
+    bool inReceipt = false;
+    bool inItems = false;
 
     while (getline(file, line)) {
-        if (line.find('{') != string::npos) {
-            inObject = true;
+        if (line.find('{') != string::npos && !inReceipt) {
             current = Receipt{};
+            current.items.clear();
+            inReceipt = true;
+            continue;
         }
-        if (!inObject) continue;
+
+        if (!inReceipt) continue;
 
         if (line.find("\"receiptNumber\"") != string::npos) {
             int num;
@@ -561,37 +509,58 @@ void loadReceipts(const char* filename, Receipt*& arr, int& size,
             string s = line.substr(start, end - start);
             strcpy_s(current.date, sizeof(current.date), s.c_str());
         }
-        else if (line.find("\"product\"") != string::npos) {
-            size_t colon = line.find(':');
-            size_t start = line.find('"', colon) + 1;
-            size_t end = line.find('"', start);
-            string s = line.substr(start, end - start);
-            for (int i = 0; i < productSize; ++i) {
-                if (s == products[i].name) {
-                    current.product = products[i];
-                    break;
-                }
-            }
-        }
-        else if (line.find("\"quantity\"") != string::npos) {
-            int q;
-            sscanf_s(line.c_str(), "    \"quantity\": %d,", &q);
-            current.quantity = q;
-        }
         else if (line.find("\"discountCard\"") != string::npos) {
-            size_t colon = line.find(':');
-            size_t start = line.find('"', colon) + 1;
-            size_t end = line.find('"', start);
-            int cardNum = stoi(line.substr(start, end - start));
+            int cardNum;
+            sscanf_s(line.c_str(), "    \"discountCard\": %d,", &cardNum);
             for (int i = 0; i < cardSize; ++i) {
                 if (cards[i].cardNumber == cardNum) {
                     current.card = cards[i];
                     break;
                 }
             }
+        }
+        else if (line.find("\"items\"") != string::npos) {
+            inItems = true; 
+            continue;
+        }
+        else if (inItems) {
+            if (line.find(']') != string::npos) { 
+                inItems = false;
+            }
+            else if (line.find('{') != string::npos) { 
+                PurchasedProduct  item;
+                
+                string pname, pcodeLine, qtyLine, priceLine;
 
+                getline(file, pname);
+                getline(file, pcodeLine);
+                getline(file, qtyLine);
+                getline(file, priceLine);
+
+                
+                size_t start = pname.find('"', pname.find(':')) + 1;
+                size_t end = pname.find('"', start);
+                string productName = pname.substr(start, end - start);
+
+                
+                for (int i = 0; i < productSize; ++i) {
+                    if (products[i].name == productName) {
+                        item.product = products[i];
+                        break;
+                    }
+                }
+
+                int qty;
+                sscanf_s(qtyLine.c_str(), "        \"quantity\": %d,", &qty);
+                item.quantity = qty;
+
+                current.items.push_back(item);
+            }
+        }
+
+        if (line.find('}') != string::npos && !inItems && inReceipt) {
             arrayExtension(arr, size, capacity, current);
-            inObject = false;
+            inReceipt = false;
         }
     }
 
@@ -723,11 +692,12 @@ static void addDiscountCard() {
     cout << "\033[32mDiscount card added!\033[0m\n";
 }
 
-// Add Receipt
+// Add Receipt 
 static void addReceipt() {
     Receipt receipt;
     cout << "\n=== ADD NEW RECEIPT ===\n";
 
+    // Input receipt number
     cout << "Enter receipt number (0 to cancel): ";
     while (!(cin >> receipt.receiptNumber)) {
         cin.clear();
@@ -735,12 +705,12 @@ static void addReceipt() {
         cout << "\033[31mInvalid input. Enter a number: \033[0m";
     }
     cin.ignore();
-
     if (receipt.receiptNumber == 0) {
         cout << "\033[33mAdd receipt cancelled.\033[0m\n";
         return;
     }
 
+    // Input date
     string input;
     while (true) {
         cout << "Enter date (YYYY-MM-DD): ";
@@ -753,28 +723,55 @@ static void addReceipt() {
         cout << "Please try again.\n";
     }
 
-    cout << "Select product:\n";
-    for (int i = 0; i < loadedProductCount; i++)
-        cout << i + 1 << ". " << loadedProducts[i].name << endl;
+    // Add purchased products
+    while (true) {
+        displayProducts(loadedProducts, loadedProductCount);
+        cout << "Select product index to add (0 to finish): ";
 
-    int prodIndex;
-    while (!(cin >> prodIndex) || prodIndex < 1 || prodIndex > loadedProductCount) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "\033[31mInvalid selection. Choose 1-" << loadedProductCount << ": \033[0m";
+        int prodIndex;
+        while (!(cin >> prodIndex) || prodIndex < 0 || prodIndex > loadedProductCount) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "\033[31mInvalid selection. Choose 0-" << loadedProductCount << ": \033[0m";
+        }
+        cin.ignore();
+
+        if (prodIndex == 0) break;
+
+        Product& selected = loadedProducts[prodIndex - 1];
+        PurchasedProduct item;
+        item.product = selected;
+
+        int qty;
+        while (true) {
+            cout << "Enter quantity: ";
+            while (!(cin >> qty) || qty < 1) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "\033[31mInvalid quantity. Enter a positive number: \033[0m";
+            }
+            cin.ignore();
+
+            if (deductStock(selected.code, qty)) {
+                item.quantity = qty;
+                break;
+            }
+            else {
+                cout << "Enter a smaller quantity.\n";
+            }
+        }
+
+        receipt.items.push_back(item);
     }
-    receipt.product = loadedProducts[prodIndex - 1];
 
-    cout << "Enter quantity: ";
-    while (!(cin >> receipt.quantity) || receipt.quantity < 1) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "\033[31mInvalid quantity. Enter a positive number: \033[0m";
+    if (receipt.items.empty()) {
+        cout << "\033[33mNo products added. Receipt cancelled.\033[0m\n";
+        return;
     }
 
-    cout << "Select discount card:\n";
-    for (int i = 0; i < loadedCardCount; i++)
-        cout << i + 1 << ". " << loadedCards[i].cardNumber << " (" << loadedCards[i].ownerFirstName << ")\n";
+    // Select discount card
+    displayDiscountCards(loadedCards, loadedCardCount);
+    cout << "\nSelect discount card: ";
 
     int cardIndex;
     while (!(cin >> cardIndex) || cardIndex < 1 || cardIndex > loadedCardCount) {
@@ -784,6 +781,7 @@ static void addReceipt() {
     }
     receipt.card = loadedCards[cardIndex - 1];
 
+    // Save receipt
     arrayExtension(loadedReceipts, loadedReceiptCount, loadedReceiptCapacity, receipt);
     cout << "\033[32mReceipt added!\033[0m\n";
 }
@@ -948,7 +946,7 @@ static void editDiscountCard(DiscountCard* arr, int size) {
         cout << "\033[31mDiscount card not found.\033[0m\n";
 }
 
-// Edit Receipt
+// Edit Receipt 
 static void editReceipt(Receipt* arr, int size) {
     displayReceipts(arr, size);
 
@@ -971,26 +969,9 @@ static void editReceipt(Receipt* arr, int size) {
         if (arr[i].receiptNumber == number) {
             found = true;
             cout << "\nEditing receipt " << arr[i].receiptNumber << endl;
-
             string input;
 
-            displayProducts(loadedProducts, loadedProductCount);
-            cout << "Enter new product code (" << arr[i].product.code << "): ";
-            getline(cin, input);
-            if (!input.empty()) {
-                int newCode = stoi(input);
-                for (int j = 0; j < loadedProductCount; j++) {
-                    if (loadedProducts[j].code == newCode) {
-                        arr[i].product = loadedProducts[j];
-                        break;
-                    }
-                }
-            }
-
-            cout << "Enter new quantity (" << arr[i].quantity << "): ";
-            getline(cin, input);
-            if (!input.empty()) arr[i].quantity = stoi(input);
-
+            // Edit date
             while (true) {
                 cout << "Enter new date (" << arr[i].date << ") or press Enter to keep: ";
                 getline(cin, input);
@@ -1002,8 +983,120 @@ static void editReceipt(Receipt* arr, int size) {
                 }
             }
 
+            // Edit purchased products
+            while (true) {
+                cout << "\nPurchased products in this receipt:\n";
+                for (size_t j = 0; j < arr[i].items.size(); j++) {
+                    cout << j + 1 << ". " << arr[i].items[j].product.name
+                        << " (Qty: " << arr[i].items[j].quantity << ")\n";
+                }
+                cout << "Enter product number to edit (0 to finish, -1 to add new): ";
+                int prodChoice;
+                while (!(cin >> prodChoice)) {
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout << "\033[31mInvalid input. Enter a number: \033[0m";
+                }
+                cin.ignore();
+
+                if (prodChoice == 0) break;
+
+                // Add new product
+                if (prodChoice == -1) {
+                    displayProducts(loadedProducts, loadedProductCount);
+                    cout << "Select new product index: ";
+                    int newProdIndex;
+                    while (!(cin >> newProdIndex) || newProdIndex < 1 || newProdIndex > loadedProductCount) {
+                        cin.clear();
+                        cin.ignore(1000, '\n');
+                        cout << "\033[31mInvalid selection. Choose 1-" << loadedProductCount << ": \033[0m";
+                    }
+                    cin.ignore();
+
+                    PurchasedProduct newItem;
+                    newItem.product = loadedProducts[newProdIndex - 1];
+
+                    int qty;
+                    while (true) {
+                        cout << "Enter quantity: ";
+                        while (!(cin >> qty) || qty < 1) {
+                            cin.clear();
+                            cin.ignore(1000, '\n');
+                            cout << "\033[31mInvalid quantity. Enter a positive number: \033[0m";
+                        }
+                        cin.ignore();
+
+                        if (deductStock(newItem.product.code, qty)) {
+                            newItem.quantity = qty;
+                            break;
+                        }
+                        else {
+                            cout << "Enter a smaller quantity.\n";
+                        }
+                    }
+
+                    arr[i].items.push_back(newItem);
+                    continue;
+                }
+
+                // Edit existing product
+                if (prodChoice > 0 && prodChoice <= static_cast<int>(arr[i].items.size())) {
+                    PurchasedProduct& item = arr[i].items[prodChoice - 1];
+
+                    // Restore old quantity to stock
+                    for (int k = 0; k < loadedProductCount; k++) {
+                        if (loadedProducts[k].code == item.product.code) {
+                            loadedProducts[k].quantityInStock += item.quantity;
+                            break;
+                        }
+                    }
+
+                    displayProducts(loadedProducts, loadedProductCount);
+                    cout << "Enter new product index or press Enter to keep: ";
+                    getline(cin, input);
+
+                    int prodIndex = -1;
+                    if (!input.empty()) {
+                        int newIndex = stoi(input);
+
+                        if (newIndex >= 1 && newIndex <= loadedProductCount) {
+                            item.product = loadedProducts[newIndex - 1];
+                            prodIndex = newIndex - 1;
+                        }
+                        else {
+                            cout << "\033[31mInvalid index! Must be 1-" << loadedProductCount << ". Keeping old product.\033[0m\n";
+                        }
+                    }
+                    else {
+                        // Keep the same product
+                        for (int k = 0; k < loadedProductCount; k++) {
+                            if (loadedProducts[k].code == item.product.code) {
+                                prodIndex = k;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Edit quantity with stock check
+                    while (true) {
+                        cout << "Enter new quantity (" << item.quantity << "): ";
+                        getline(cin, input);
+                        if (input.empty()) break;
+                        int newQty = stoi(input);
+                        if (deductStock(item.product.code, newQty)) {
+                            item.quantity = newQty;
+                            break;
+                        }
+                        else {
+                            cout << "Enter a smaller quantity.\n";
+                        }
+                    }
+                }
+            }
+
+            // Edit discount card
             displayDiscountCards(loadedCards, loadedCardCount);
-            cout << "Enter new discount card number (" << arr[i].card.cardNumber << "): ";
+            cout << "Enter new discount card number (" << arr[i].card.cardNumber << ") or press Enter to keep: ";
             getline(cin, input);
             if (!input.empty()) {
                 int cardNum = stoi(input);
@@ -1022,6 +1115,113 @@ static void editReceipt(Receipt* arr, int size) {
 
     if (!found)
         cout << "\033[31mReceipt not found.\033[0m\n";
+}
+
+// =============================== SORT FUNCTIONS ===============================
+
+// By name
+static void sortProductsByName(Product* arr, int size) {
+    if (size == 0) {
+        cout << "\033[31mNo products to display.\033[0m\n";
+        return;
+    }
+
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (std::string(arr[j].name) > std::string(arr[j + 1].name)) {
+                Product temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+
+    displayProducts(loadedProducts, loadedProductCount);
+    cout << "\033[32mProduct sorted successfully!\033[0m\n";
+}
+
+// By price ascending
+static void sortProductsByPriceAscending(Product* arr, int size) {
+    if (size == 0) {
+        cout << "\033[31mNo products to display.\033[0m\n";
+        return;
+    }
+
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (arr[j].price > arr[j + 1].price) {
+                Product temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+
+    displayProducts(loadedProducts, loadedProductCount);
+    cout << "\033[32mProduct sorted successfully!\033[0m\n";
+}
+
+// By price descending
+static void sortProductsByPriceDescending(Product* arr, int size) {
+    if (size == 0) {
+        cout << "\033[31mNo products to display.\033[0m\n";
+        return;
+    }
+
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (arr[j].price < arr[j + 1].price) {
+                Product temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+
+    displayProducts(loadedProducts, loadedProductCount);
+    cout << "\033[32mProduct sorted successfully!\033[0m\n";
+}
+
+// By quantity ascending
+static void sortProductsByQuantityAscending(Product* arr, int size) {
+    if (size == 0) {
+        cout << "\033[31mNo products to display.\033[0m\n";
+        return;
+    }
+
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (arr[j].quantityInStock > arr[j + 1].quantityInStock) {
+                Product temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+
+    displayProducts(loadedProducts, loadedProductCount);
+    cout << "\033[32mProduct sorted successfully!\033[0m\n";
+}
+
+// By quantity descending
+static void sortProductsByQuantityDescending(Product* arr, int size) {
+    if (size == 0) {
+        cout << "\033[31mNo products to display.\033[0m\n";
+        return;
+    }
+
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (arr[j].quantityInStock < arr[j + 1].quantityInStock) {
+                Product temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+
+    displayProducts(loadedProducts, loadedProductCount);
+    cout << "\033[32mProduct sorted successfully!\033[0m\n";
 }
 
 // =============================== PROGRAM MENU ===============================//
@@ -1172,7 +1372,7 @@ void runProgramMenu() {
                     if (loadedCardCount > 0) deleteItem(loadedCards, loadedCardCount, displayDiscountCards, "discount card");
                     else cout << "\033[1;31m\nNo discount cards available!\033[0m\n";
                     break;
-                case 4:
+                     case 4:
                     if (loadedReceiptCount > 0) deleteItem(loadedReceipts, loadedReceiptCount, displayReceipts, "receipt");
                     else cout << "\033[1;31m\nNo receipts available!\033[0m\n";
                     break;

@@ -1,5 +1,6 @@
 #pragma once
 #include "dataTypes.h"
+#include <vector>
 
 extern Product initialProducts[20];
 extern Employee initialEmployees[5];
