@@ -116,7 +116,6 @@ void displayReceipts(const Receipt* arr, int size) {
         cout << "Date: " << arr[i].date << endl;
         cout << "-----------------------------------------------" << endl;
 
-        // Заголовок товаров
         cout << left
             << setw(5) << "N"
             << setw(25) << "Product"
@@ -125,7 +124,6 @@ void displayReceipts(const Receipt* arr, int size) {
             << endl;
         cout << "-----------------------------------------------" << endl;
 
-        // Сами товары
         for (size_t j = 0; j < arr[i].items.size(); j++) {
             const PurchasedProduct& item = arr[i].items[j];
             cout << left
@@ -138,7 +136,6 @@ void displayReceipts(const Receipt* arr, int size) {
 
         cout << "-----------------------------------------------" << endl;
 
-        // Итоги
         cout << left
             << setw(20) << "Total (no disc):" << setw(10) << fixed << setprecision(2) << arr[i].getTotalNoDiscount() << endl;
         cout << left

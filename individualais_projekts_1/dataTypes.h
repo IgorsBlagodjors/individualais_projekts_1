@@ -64,7 +64,7 @@ inline double cardToDiscount(DiscountCardType c) {
 
 struct Product {
     int code;
-    char name[50];
+    char name[31];
     double price;
     int quantityInStock;
     Category category;
@@ -72,15 +72,15 @@ struct Product {
 
 struct DiscountCard {
     int cardNumber;
-    char ownerFirstName[20];
-    char ownerLastName[30];
+    char ownerFirstName[11];
+    char ownerLastName[11];
     DiscountCardType type;
 };
 
 struct Employee {
     int id;
-    char firstName[10];
-    char lastName[20];
+    char firstName[11];
+    char lastName[11];
     Category department;
 };
 
@@ -93,9 +93,8 @@ struct Receipt {
     int receiptNumber;
     DiscountCard card;
     vector<PurchasedProduct > items;
-    char date[12];   
-
-
+    char date[12];                
+    
     // =============================== PROGRAMM CALCULATIONS ===============================
 
     double getTotalNoDiscount() const {

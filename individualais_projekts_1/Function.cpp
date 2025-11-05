@@ -10,6 +10,207 @@ using namespace std;
 
 // =============================== HELPER FUNCTIONS ===============================
 
+// Input int validation for numbers
+static int intValidator(const string& prompt, bool allowZeroAsCancel = false) {
+    int code;
+
+    cout << prompt;
+
+    while (true) {
+        if (cin >> code) {
+            if (code == 0 && allowZeroAsCancel) {
+                cout << "\033[33mOperation cancelled.\033[0m\n";
+                return 0;
+            }
+            if (code > 0 && code <= 9999) {
+                cin.ignore(1000, '\n'); 
+                return code;
+            }
+        }
+
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "\033[31mInvalid input. Enter a number from 1 to 9999: \033[0m";
+    }
+}
+
+// Input double validation for numbers
+static double doubleValidator(const string& prompt, bool allowZeroAsCancel = false) {
+    double code;
+
+    cout << prompt;
+
+    while (true) {
+        if (cin >> code) {
+            if (code == 0 && allowZeroAsCancel) {
+                cout << "\033[33mOperation cancelled.\033[0m\n";
+                return 0;
+            }
+            if (code > 0 && code <= 9999) {
+                cin.ignore(1000, '\n');
+                return code;
+            }
+        }
+
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "\033[31mInvalid input. Enter a number from 1 to 9999: \033[0m";
+    }
+}
+
+// Function for safe input of a string into a char
+static void stringValidator(char* buffer, int maxLen, const string& prompt) {
+    while (true) {
+        cout << prompt;
+        cin.getline(buffer, maxLen);
+
+        // If the buffer overflowed, clear the remaining characters
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "\033[31mInput too long! Maximum " << (maxLen - 1) << " characters.\033[0m\n";
+            continue;
+        }
+
+        // Check for empty string
+        if (strlen(buffer) == 0) {
+            cout << "\033[31mInput cannot be empty!\033[0m\n";
+            continue;
+        }
+
+        // Check that input is not only digits
+        bool allDigits = all_of(buffer, buffer + strlen(buffer), ::isdigit);
+        if (allDigits) {
+            cout << "\033[31mInput cannot be only numbers!\033[0m\n";
+            continue;
+        }
+
+        break;
+    }
+}
+
+// Function for index selection with undo option (0 = undo)
+static int indexValidator(int size, const string& prompt) {
+    if (size == 0) {
+        cout << "\033[31mNo items available.\033[0m\n";
+        return 0;
+    }
+    cout << prompt;
+    int index;
+    while (true) {
+        if (!(cin >> index)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "\033[31mInvalid input. Enter a number: \033[0m";
+            continue;
+        }
+        cin.ignore(1000, '\n'); 
+
+        if (index == 0) {
+            return 0; 
+        }
+        if (index >= 1 && index <= size) {
+            return index;
+        }
+
+        cout << "\033[31mInvalid selection. Choose 1-" << size << " or 0 to cancel: \033[0m";
+    }
+}
+
+// Input validation for string (can leave the old, press Enter)
+static void editStringValidator(char* buffer, int maxLen, const string& fieldName) {
+    while (true) {
+        cout << "Current " << fieldName << ": " << buffer << endl;
+        cout << "Press Enter to keep current value.\n";
+        cout << "Enter new " << fieldName << " (max " << (maxLen - 1) << " chars): ";
+
+        char input[31];
+        cin.getline(input, maxLen);
+
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "\033[31mInput too long!.\033[0m\n";
+            continue;
+
+        }
+
+        if (strlen(input) == 0)
+            return;
+
+        bool allDigits = all_of(input, input + strlen(input), ::isdigit);
+        if (allDigits) {
+            cout << "\033[31mInput cannot be only numbers!.\033[0m\n";
+            continue;
+
+        }
+
+        strcpy_s(buffer, maxLen, input);
+        break;
+    }
+  
+}
+
+// Input validation for int (loop until valid or Enter)
+static void editIntValidator(int& field, const string& fieldName) {
+    while (true) {
+        cout << "Current " << fieldName << ": " << field << endl;
+        cout << "Press Enter to keep current value.\n";
+        cout << "Enter new " << fieldName << " (1-9999): ";
+
+        string input;
+        getline(cin, input);
+
+        if (input.empty()) {
+            return;
+        }
+
+        try {
+            int value = stoi(input);
+            if (value > 0 && value <= 9999) {
+                field = value;
+                return; 
+            }
+            else {
+                cout << "\033[31mInvalid range. Enter a number from 1 to 9999 or press Enter to keep old value.\033[0m\n";
+            }
+        }
+        catch (...) {
+            cout << "\033[31mInvalid input. Enter a valid number or press Enter to keep old value.\033[0m\n";
+        }
+    }
+}
+
+// Input validation for double (loop until valid or Enter)
+static void editDoubleValidator(double& field, const string& fieldName) {
+    while (true) {
+        cout << "Current " << fieldName << ": " << field << endl;
+        cout << "Press Enter to keep current value.\n";
+        cout << "Enter new " << fieldName << " (0.01-9999.99): ";
+
+        string input;
+        getline(cin, input);
+
+        if (input.empty()) {
+            return;
+        }
+
+        try {
+            double value = stod(input);
+            if (value > 0.0 && value <= 9999.99) {
+                field = value;
+                return; 
+            }
+            else {
+                cout << "\033[31mInvalid range. Enter a number from 0.01 to 9999.99 or press Enter to keep old value.\033[0m\n";
+            }
+        }
+        catch (...) {
+            cout << "\033[31mInvalid input. Enter a valid number or press Enter to keep old value.\033[0m\n";
+        }
+    }
+}
+
 // Expand dynamic array if needed
 template<typename T>
 void arrayExtension(T*& arr, int& size, int& capacity, const T& element) {
@@ -196,6 +397,41 @@ static bool deductStock(int productCode, int quantity) {
 
     cout << "\033[31mProduct with code " << productCode << " not found!\033[0m\n";
     return false;
+}
+
+static PurchasedProduct inputNewProduct() {
+    PurchasedProduct newItem;
+    displayProducts(loadedProducts, loadedProductCount);
+
+    int prodIndex;
+    cout << "Select product index: ";
+    while (!(cin >> prodIndex) || prodIndex < 1 || prodIndex > loadedProductCount) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "\033[31mInvalid selection. Choose 1-" << loadedProductCount << ": \033[0m";
+    }
+    cin.ignore();
+
+    newItem.product = loadedProducts[prodIndex - 1];
+
+    int qty;
+    while (true) {
+        cout << "Enter quantity: ";
+        if (cin >> qty && qty > 0) {
+            cin.ignore(1000, '\n');
+            if (deductStock(newItem.product.code, qty)) {
+                newItem.quantity = qty;
+                break;
+            }
+        }
+        else {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "\033[31mInvalid quantity. Enter a positive number: \033[0m" <<endl;
+        }
+    }
+
+    return newItem;
 }
 
 // =============================== SAVE FUNCTIONS ===============================
@@ -560,39 +796,16 @@ void loadReceipts(
 // =============================== ADD FUNCTIONS =============================== //
 
 // Add Product
-static void addProduct() {
+void addProduct() {
     Product newProduct;
     cout << "\n=== ADD NEW PRODUCT ===\n";
 
-    cout << "Enter product code (0 to cancel): ";
-    while (!(cin >> newProduct.code)) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "\033[31mInvalid input. Enter a number: \033[0m";
-    }
-    cin.ignore();
+    newProduct.code = intValidator("Enter product code (0 to cancel, max 4 digits): ", true);
+    if (newProduct.code == 0) return;
 
-    if (newProduct.code == 0) {
-        cout << "\033[33mAdd product cancelled.\033[0m\n";
-        return;
-    }
-
-    cout << "Enter name: ";
-    cin.getline(newProduct.name, 50);
-
-    cout << "Enter price: ";
-    while (!(cin >> newProduct.price)) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "\033[31mInvalid input. Enter a number: \033[0m";
-    }
-
-    cout << "Enter quantity in stock: ";
-    while (!(cin >> newProduct.quantityInStock)) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "\033[31mInvalid input. Enter a number: \033[0m";
-    }
+    stringValidator(newProduct.name, 31, "Enter name (max 30 chars): ");
+    newProduct.price = doubleValidator("Enter product price (max 4 digits): ");
+    newProduct.quantityInStock = intValidator("Enter product quantity in stock (max 4 digits): ");
 
     int category;
     cout << "Select category (0-Food, 1-Clothes, 2-Electronics, 3-Books, 4-HomeAndGarden): ";
@@ -608,28 +821,15 @@ static void addProduct() {
 }
 
 // Add Employee
-static void addEmployee() {
+void addEmployee() {
     Employee newEmployee;
     cout << "\n=== ADD NEW EMPLOYEE ===\n";
 
-    cout << "Enter employee ID (0 to cancel): ";
-    while (!(cin >> newEmployee.id)) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "\033[31mInvalid input. Enter a number: \033[0m";
-    }
-    cin.ignore();
+    newEmployee.id = intValidator("Enter employee ID (0 to cancel, max 4 digits): ", true);
+    if (newEmployee.id == 0)  return;
 
-    if (newEmployee.id == 0) {
-        cout << "\033[33mAdd employee cancelled.\033[0m\n";
-        return;
-    }
-
-    cout << "Enter first name: ";
-    cin.getline(newEmployee.firstName, 10);
-
-    cout << "Enter last name: ";
-    cin.getline(newEmployee.lastName, 20);
+    stringValidator(newEmployee.firstName, 11, "Enter first name (max 10 chars): ");
+    stringValidator(newEmployee.lastName, 11, "Enter last name (max 10 chars): ");
 
     int dep;
     cout << "Select department (0-Food, 1-Clothes, 2-Electronics, 3-Books, 4-HomeAndGarden): ";
@@ -645,28 +845,15 @@ static void addEmployee() {
 }
 
 // Add Discount Card
-static void addDiscountCard() {
+void addDiscountCard() {
     DiscountCard card;
     cout << "\n=== ADD NEW DISCOUNT CARD ===\n";
 
-    cout << "Enter card number (0 to cancel): ";
-    while (!(cin >> card.cardNumber)) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "\033[31mInvalid input. Enter a number: \033[0m";
-    }
-    cin.ignore();
+    card.cardNumber = intValidator("Enter card number (0 to cancel, max 4 digits): ", true);
+    if (card.cardNumber == 0) return;
 
-    if (card.cardNumber == 0) {
-        cout << "\033[33mAdd discount card cancelled.\033[0m\n";
-        return;
-    }
-
-    cout << "Enter owner's first name: ";
-    cin.getline(card.ownerFirstName, 20);
-
-    cout << "Enter owner's last name: ";
-    cin.getline(card.ownerLastName, 30);
+    stringValidator(card.ownerFirstName, 11, "Enter owner's first name (max 10 chars): ");
+    stringValidator(card.ownerLastName, 11, "Enter last name (max 10 chars): ");
 
     int type;
     cout << "Select card type (0-Bronze, 1-Silver, 2-Gold): ";
@@ -682,25 +869,13 @@ static void addDiscountCard() {
 }
 
 // Add Receipt
-static void addReceipt() {
+void addReceipt() {
     Receipt receipt;
     cout << "\n=== ADD NEW RECEIPT ===\n";
 
-    // Input receipt number
-    cout << "Enter receipt number (0 to cancel): ";
-    while (!(cin >> receipt.receiptNumber)) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "\033[31mInvalid input. Enter a number: \033[0m";
-    }
-    cin.ignore();
+    receipt.receiptNumber = intValidator("Enter receipt number (0 to cancel, max 4 digits): ", true);
+    if (receipt.receiptNumber == 0) return;
 
-    if (receipt.receiptNumber == 0) {
-        cout << "\033[33mAdd receipt cancelled.\033[0m\n";
-        return;
-    }
-
-    // Input date
     string input;
     while (true) {
         cout << "Enter date (YYYY-MM-DD): ";
@@ -712,53 +887,24 @@ static void addReceipt() {
         }
         cout << "Please try again.\n";
     }
-
     // Add purchased products
     while (true) {
-        displayProducts(loadedProducts, loadedProductCount);
-        cout << "Select product index to add (0 to finish): ";
+        PurchasedProduct item = inputNewProduct();
+        receipt.items.push_back(item);
 
-        int prodIndex;
-        while (!(cin >> prodIndex) || prodIndex < 0 || prodIndex > loadedProductCount) {
+        cout << "Enter 0 to finish, -1 to add new product: ";
+        int prodChoice;
+        while (!(cin >> prodChoice) || (prodChoice != 0 && prodChoice != -1)) {
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "\033[31mInvalid selection. Choose 0-" << loadedProductCount << ": \033[0m";
+            cout << "\033[31mInvalid input. Enter 0 to finish or -1 to add new: \033[0m";
         }
         cin.ignore();
 
-        if (prodIndex == 0) break;
-
-        Product& selected = loadedProducts[prodIndex - 1];
-        PurchasedProduct item;
-        item.product = selected;
-
-        int qty;
-        while (true) {
-            cout << "Enter quantity: ";
-            while (!(cin >> qty) || qty < 1) {
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << "\033[31mInvalid quantity. Enter a positive number: \033[0m";
-            }
-            cin.ignore();
-
-            if (deductStock(selected.code, qty)) {
-                item.quantity = qty;
-                break;
-            }
-            else {
-                cout << "Enter a smaller quantity.\n";
-            }
-        }
-
-        receipt.items.push_back(item);
+        if (prodChoice == 0) break; 
     }
 
-    if (receipt.items.empty()) {
-        cout << "\033[33mNo products added. Receipt cancelled.\033[0m\n";
-        return;
-    }
-
+ 
     // Select discount card
     displayDiscountCards(loadedCards, loadedCardCount);
     cout << "\nSelect discount card: ";
@@ -779,165 +925,171 @@ static void addReceipt() {
 // =============================== EDIT FUNCTIONS =============================== //
 
 // Edit Product
-static void editProduct(Product* arr, int size) {
+void editProduct(Product* arr, int size) {
+    if (size == 0) {
+        cout << "\033[31mNo products to edit.\033[0m\n";
+        return;
+    }
+
     displayProducts(arr, size);
 
-    cout << "Enter product code to edit (0 to cancel): ";
-    int code;
-    while (!(cin >> code)) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "\033[31mInvalid input. Enter a number: \033[0m";
-    }
-    cin.ignore();
-
-    if (code == 0) {
+    int prodIndex = indexValidator(size, "Select product index (0 to cancel): ");
+    if (prodIndex == 0) {
         cout << "\033[33mEdit cancelled.\033[0m\n";
         return;
     }
 
-    bool found = false;
-    for (int i = 0; i < size; i++) {
-        if (arr[i].code == code) {
-            found = true;
-            cout << "\nEditing product: " << arr[i].name << endl;
 
-            cout << "Enter new name (" << arr[i].name << "): ";
-            string newName;
-            getline(cin, newName);
-            if (!newName.empty()) strcpy_s(arr[i].name, newName.c_str());
+    Product& p = arr[prodIndex - 1];
+    cout << "\n=== EDIT PRODUCT #" << prodIndex << ": " << p.name << " ===\n";
 
-            cout << "Enter new price (" << arr[i].price << "): ";
-            string input;
-            getline(cin, input);
-            if (!input.empty()) arr[i].price = stod(input);
+	editIntValidator(p.code, "code");
+    editStringValidator(p.name, 31, "name");
+	editDoubleValidator(p.price, "price");
+    editIntValidator(p.quantityInStock, "quantity in stock");
 
-            cout << "Enter new quantity (" << arr[i].quantityInStock << "): ";
-            getline(cin, input);
-            if (!input.empty()) arr[i].quantityInStock = stoi(input);
+    cout << "Current category: " << categoryToChar(p.category) << endl;
+    cout << "Press Enter to keep current value.\n";
 
-            cout << "\n\033[32mProduct updated successfully!\033[0m\n";
+    while (true) {
+        cout << "Select new category (0-Food, 1-Clothes, 2-Electronics, 3-Books, 4-HomeAndGarden): ";
+        string catInput;
+        getline(cin, catInput);
+
+        if (catInput.empty()) {
             break;
+        }
+
+        try {
+            int catVal = stoi(catInput);
+            if (catVal >= 0 && catVal <= 4) {
+                p.category = static_cast<Category>(catVal);
+                break; 
+            }
+            else {
+                cout << "\033[31mInvalid category. Enter a number 0-4 or press Enter to keep old value.\033[0m\n";
+            }
+        }
+        catch (...) {
+            cout << "\033[31mInvalid input. Enter a number 0-4 or press Enter to keep old value.\033[0m\n";
         }
     }
 
-    if (!found)
-        cout << "\033[31mProduct not found.\033[0m\n";
+    cout << "\n\033[32mProduct updated successfully!\033[0m\n";
 }
 
 // Edit Employee
-static void editEmployee(Employee* arr, int size) {
+void editEmployee(Employee* arr, int size) {
+    if (size == 0) {
+        cout << "\033[31mNo products to edit.\033[0m\n";
+        return;
+    }
+
     displayEmployees(arr, size);
 
-    cout << "Enter employee ID to edit (0 to cancel): ";
-    int id;
-    while (!(cin >> id)) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "\033[31mInvalid input. Enter a number: \033[0m";
-    }
-    cin.ignore();
-
-    if (id == 0) {
+    int employeIndex = indexValidator(size, "Select employee index (0 to cancel): ");
+    if (employeIndex == 0) {
         cout << "\033[33mEdit cancelled.\033[0m\n";
         return;
     }
 
-    bool found = false;
-    for (int i = 0; i < size; i++) {
-        if (arr[i].id == id) {
-            found = true;
-            cout << "\nEditing employee: " << arr[i].firstName << " " << arr[i].lastName << endl;
+    Employee& e = arr[employeIndex - 1];
+    cout << "\n=== EDIT EMPLOYEE #" << employeIndex << ": " << e.firstName << " ===\n";
 
-            cout << "Enter new first name (" << arr[i].firstName << "): ";
-            string fn;
-            getline(cin, fn);
-            if (!fn.empty()) strcpy_s(arr[i].firstName, fn.c_str());
+	editIntValidator(e.id, "ID");
+    editStringValidator(e.firstName, 11, "name");
+    editStringValidator(e.lastName, 11, "last name");
+  
 
-            cout << "Enter new last name (" << arr[i].lastName << "): ";
-            string ln;
-            getline(cin, ln);
-            if (!ln.empty()) strcpy_s(arr[i].lastName, ln.c_str());
+    cout << "Current category: " << categoryToChar(e.department) << endl;
+    cout << "Press Enter to keep current value.\n";
 
-            cout << "Select new department (" << static_cast<int>(arr[i].department) << "):\n";
-            cout << "0 - Food\n1 - Clothes\n2 - Electronics\n3 - Books\n4 - HomeAndGarden\n";
-            cout << "Enter choice (press Enter to skip): ";
-            string depInput;
-            getline(cin, depInput);
-            if (!depInput.empty()) {
-                int dep = stoi(depInput);
-                if (dep >= 0 && dep <= 4)
-                    arr[i].department = static_cast<Category>(dep);
-                else
-                    cout << "\033[31mInvalid department, unchanged.\033[0m\n";
-            }
+    while (true) {
+        cout << "Select new category (0-Food, 1-Clothes, 2-Electronics, 3-Books, 4-HomeAndGarden): ";
+        string catInput;
+        getline(cin, catInput);
 
-            cout << "\n\033[32mEmployee updated successfully!\033[0m\n";
+        if (catInput.empty()) {
             break;
+        }
+
+        try {
+            int catVal = stoi(catInput);
+            if (catVal >= 0 && catVal <= 4) {
+                e.department = static_cast<Category>(catVal);
+                break;
+            }
+            else {
+                cout << "\033[31mInvalid depaetment. Enter a number 0-4 or press Enter to keep old value.\033[0m\n";
+            }
+        }
+        catch (...) {
+            cout << "\033[31mInvalid input. Enter a number 0-4 or press Enter to keep old value.\033[0m\n";
         }
     }
 
-    if (!found)
-        cout << "\033[31mEmployee not found.\033[0m\n";
+    cout << "\n\033[32mEmploye updated successfully!\033[0m\n";
 }
 
 // Edit Discount Card
-static void editDiscountCard(DiscountCard* arr, int size) {
+void editDiscountCard(DiscountCard* arr, int size) {
+    if (size == 0) {
+        cout << "\033[31mNo products to edit.\033[0m\n";
+        return;
+    }
+ 
     displayDiscountCards(arr, size);
 
-    cout << "Enter discount card number to edit (0 to cancel): ";
-    int number;
-    while (!(cin >> number)) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "\033[31mInvalid input. Enter a number: \033[0m";
-    }
-    cin.ignore();
-
-    if (number == 0) {
+    int discountIndex = indexValidator(size, "Select discount card index (0 to cancel): ");
+    if (discountIndex == 0) {
         cout << "\033[33mEdit cancelled.\033[0m\n";
         return;
     }
 
-    bool found = false;
-    for (int i = 0; i < size; i++) {
-        if (arr[i].cardNumber == number) {
-            found = true;
-            cout << "\nEditing discount card " << arr[i].cardNumber << endl;
+    DiscountCard& d = arr[discountIndex - 1];
+    cout << "\n=== EDIT DISCOUNT CARD #" << discountIndex << ": " << d.cardNumber << " ===\n";
 
-            cout << "Enter new owner first name (" << arr[i].ownerFirstName << "): ";
-            string firstName;
-            getline(cin, firstName);
-            if (!firstName.empty()) strcpy_s(arr[i].ownerFirstName, firstName.c_str());
+    editIntValidator(d.cardNumber, " card number");
+    editStringValidator(d.ownerFirstName, 11, "name");
+    editStringValidator(d.ownerLastName, 11, "last name");
 
-            cout << "Enter new owner last name (" << arr[i].ownerLastName << "): ";
-            string lastName;
-            getline(cin, lastName);
-            if (!lastName.empty()) strcpy_s(arr[i].ownerLastName, lastName.c_str());
+    cout << "Current category: " << cardToChar(d.type) << endl;
+    cout << "Press Enter to keep current value.\n";
 
-            cout << "Select new card type (" << static_cast<int>(arr[i].type) << "):\n";
-            cout << "0 - Bronze\n1 - Silver\n2 - Gold\nEnter choice: ";
-            string typeInput;
-            getline(cin, typeInput);
-            if (!typeInput.empty()) {
-                int t = stoi(typeInput);
-                if (t >= 0 && t <= 2)
-                    arr[i].type = static_cast<DiscountCardType>(t);
-                else
-                    cout << "\033[31mInvalid card type, unchanged.\033[0m\n";
-            }
+    while (true) {
+        cout << "Select new type (0-Bronze, 1-Silver, 2-Gold: ";
+        string catInput;
+        getline(cin, catInput);
 
-            cout << "\n\033[32mDiscount card updated successfully!\033[0m\n";
+        if (catInput.empty()) {
             break;
         }
-    }
 
-    if (!found)
-        cout << "\033[31mDiscount card not found.\033[0m\n";
+        try {
+            int catVal = stoi(catInput);
+            if (catVal >= 0 && catVal <= 2) {
+                d.type = static_cast<DiscountCardType>(catVal);
+                break;
+            }
+            else {
+                cout << "\033[31mInvalid type. Enter a number 0-2 or press Enter to keep old value.\033[0m\n";
+            }
+        }
+        catch (...) {
+            cout << "\033[31mInvalid input. Enter a number 0-4 or press Enter to keep old value.\033[0m\n";
+        }
+    }
+    cout << "\n\033[32mDiscount card updated successfully!\033[0m\n";
+    
 }
 
 // Edit Receipt 
-static void editReceipt(Receipt* arr, int size) {
+void editReceipt(Receipt* arr, int size) {
+    if (size == 0) {
+        cout << "\033[31mNo products to edit.\033[0m\n";
+        return;
+    }
+
     displayReceipts(arr, size);
 
     cout << "Enter receipt number to edit (0 to cancel): ";
@@ -959,8 +1111,10 @@ static void editReceipt(Receipt* arr, int size) {
         if (arr[i].receiptNumber == number) {
             found = true;
             cout << "\nEditing receipt " << arr[i].receiptNumber << endl;
-            string input;
 
+            editIntValidator(arr[i].receiptNumber, "receipt number");
+
+            string input;
             // Edit date
             while (true) {
                 cout << "Enter new date (" << arr[i].date << ") or press Enter to keep: ";
@@ -981,7 +1135,7 @@ static void editReceipt(Receipt* arr, int size) {
                         << " (Qty: " << arr[i].items[j].quantity << ")\n";
                 }
 
-                cout << "Enter product number to edit (0 to finish, -1 to add new): ";
+                cout << "Enter product index to edit (0 to finish, -1 to add new): ";
                 int prodChoice;
                 while (!(cin >> prodChoice)) {
                     cin.clear();
@@ -995,38 +1149,8 @@ static void editReceipt(Receipt* arr, int size) {
                 // Add new product
                 if (prodChoice == -1) {
                     displayProducts(loadedProducts, loadedProductCount);
-                    cout << "Select new product index: ";
-                    int newProdIndex;
-                    while (!(cin >> newProdIndex) || newProdIndex < 1 || newProdIndex > loadedProductCount) {
-                        cin.clear();
-                        cin.ignore(1000, '\n');
-                        cout << "\033[31mInvalid selection. Choose 1-" << loadedProductCount << ": \033[0m";
-                    }
-                    cin.ignore();
-
-                    PurchasedProduct newItem;
-                    newItem.product = loadedProducts[newProdIndex - 1];
-
-                    int qty;
-                    while (true) {
-                        cout << "Enter quantity: ";
-                        while (!(cin >> qty) || qty < 1) {
-                            cin.clear();
-                            cin.ignore(1000, '\n');
-                            cout << "\033[31mInvalid quantity. Enter a positive number: \033[0m";
-                        }
-                        cin.ignore();
-
-                        if (deductStock(newItem.product.code, qty)) {
-                            newItem.quantity = qty;
-                            break;
-                        }
-                        else {
-                            cout << "Enter a smaller quantity.\n";
-                        }
-                    }
-
-                    arr[i].items.push_back(newItem);
+                    PurchasedProduct item = inputNewProduct();
+                    arr[i].items.push_back(item);
                     continue;
                 }
 
@@ -1043,30 +1167,9 @@ static void editReceipt(Receipt* arr, int size) {
                     }
 
                     displayProducts(loadedProducts, loadedProductCount);
-                    cout << "Enter new product index or press Enter to keep: ";
-                    getline(cin, input);
 
-                    int prodIndex = -1;
-                    if (!input.empty()) {
-                        int newIndex = stoi(input);
-                        if (newIndex >= 1 && newIndex <= loadedProductCount) {
-                            item.product = loadedProducts[newIndex - 1];
-                            prodIndex = newIndex - 1;
-                        }
-                        else {
-                            cout << "\033[31mInvalid index! Must be 1-" << loadedProductCount
-                                << ". Keeping old product.\033[0m\n";
-                        }
-                    }
-                    else {
-                        // Keep the same product
-                        for (int k = 0; k < loadedProductCount; k++) {
-                            if (loadedProducts[k].code == item.product.code) {
-                                prodIndex = k;
-                                break;
-                            }
-                        }
-                    }
+                    int newIndex = indexValidator(loadedProductCount, "Enter new product index: ");
+                    item.product = loadedProducts[newIndex - 1];
 
                     // Edit quantity with stock check
                     while (true) {
@@ -1088,18 +1191,15 @@ static void editReceipt(Receipt* arr, int size) {
 
             // Edit discount card
             displayDiscountCards(loadedCards, loadedCardCount);
-            cout << "Enter new discount card number (" << arr[i].card.cardNumber
-                << ") or press Enter to keep: ";
-            getline(cin, input);
-            if (!input.empty()) {
-                int cardNum = stoi(input);
-                for (int j = 0; j < loadedCardCount; j++) {
-                    if (loadedCards[j].cardNumber == cardNum) {
-                        arr[i].card = loadedCards[j];
-                        break;
-                    }
+
+
+
+
+            int newIndex = indexValidator(loadedCardCount, "Enter card index: ");
+                for (int i = 0; i < loadedCardCount; i++) {
+                    arr[i].card = loadedCards[newIndex - 1];
                 }
-            }
+           
 
             cout << "\n\033[32mReceipt updated successfully!\033[0m\n";
             break;
@@ -1113,7 +1213,7 @@ static void editReceipt(Receipt* arr, int size) {
 // =============================== SORT FUNCTIONS ===============================
 
 // By name
-static void sortProductsByName(Product* arr, int size) {
+void sortProductsByName(Product* arr, int size) {
     if (size == 0) {
         cout << "\033[31mNo products to display.\033[0m\n";
         return;
@@ -1134,7 +1234,7 @@ static void sortProductsByName(Product* arr, int size) {
 }
 
 // By price ascending
-static void sortProductsByPriceAscending(Product* arr, int size) {
+void sortProductsByPriceAscending(Product* arr, int size) {
     if (size == 0) {
         cout << "\033[31mNo products to display.\033[0m\n";
         return;
@@ -1155,7 +1255,7 @@ static void sortProductsByPriceAscending(Product* arr, int size) {
 }
 
 // By price descending
-static void sortProductsByPriceDescending(Product* arr, int size) {
+void sortProductsByPriceDescending(Product* arr, int size) {
     if (size == 0) {
         cout << "\033[31mNo products to display.\033[0m\n";
         return;
@@ -1176,7 +1276,7 @@ static void sortProductsByPriceDescending(Product* arr, int size) {
 }
 
 // By quantity ascending
-static void sortProductsByQuantityAscending(Product* arr, int size) {
+void sortProductsByQuantityAscending(Product* arr, int size) {
     if (size == 0) {
         cout << "\033[31mNo products to display.\033[0m\n";
         return;
@@ -1197,7 +1297,7 @@ static void sortProductsByQuantityAscending(Product* arr, int size) {
 }
 
 // By quantity descending
-static void sortProductsByQuantityDescending(Product* arr, int size) {
+void sortProductsByQuantityDescending(Product* arr, int size) {
     if (size == 0) {
         cout << "\033[31mNo products to display.\033[0m\n";
         return;

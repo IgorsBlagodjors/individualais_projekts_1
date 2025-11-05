@@ -18,5 +18,20 @@ void loadDiscountCards(const char* filename, DiscountCard*& arr, int& size, int&
 void loadReceipts(const char* filename, Receipt*& arr, int& size,
     Product* products, int productSize, DiscountCard* cards, int cardSize,
     int& capacity);
+void editDiscountCard(DiscountCard* arr, int size);
+void addProduct();
+void addEmployee();
+void addDiscountCard();
+void addReceipt();
+
+void editProduct(Product* arr, int size);
+void editEmployee(Employee* arr, int size);
+void editReceipt(Receipt* arr, int size);
+
+void sortProductsByName(Product* arr, int size);
+void sortProductsByPriceAscending(Product* arr, int size);
+void sortProductsByPriceDescending(Product* arr, int size);
+void sortProductsByQuantityAscending(Product* arr, int size);
+void sortProductsByQuantityDescending(Product* arr, int size);
 
 void runProgramMenu();
