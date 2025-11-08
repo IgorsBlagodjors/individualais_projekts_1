@@ -1221,7 +1221,7 @@ void sortProductsByName(Product* arr, int size) {
 
     for (int i = 0; i < size - 1; i++) {
         for (int j = 0; j < size - i - 1; j++) {
-            if (std::string(arr[j].name) > std::string(arr[j + 1].name)) {
+            if (string(arr[j].name) > string(arr[j + 1].name)) {
                 Product temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
