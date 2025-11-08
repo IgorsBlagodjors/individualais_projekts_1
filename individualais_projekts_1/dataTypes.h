@@ -107,8 +107,7 @@ struct Receipt {
   vector<PurchasedProduct> items;
   char date[12];
 
-  // =============================== PROGRAMM CALCULATIONS
-  // ===============================
+  // =============================== PROGRAMM CALCULATIONS ===============================
 
   double getTotalNoDiscount() const {
     double total = 0.0;

@@ -35,8 +35,7 @@ static int intValidator(const string &prompt, bool allowZeroAsCancel = false) {
 }
 
 // Input double validation for numbers
-static double doubleValidator(const string &prompt,
-                              bool allowZeroAsCancel = false) {
+static double doubleValidator(const string &prompt, bool allowZeroAsCancel = false) {
   double code;
 
   cout << prompt;
@@ -447,8 +446,7 @@ static PurchasedProduct inputNewProduct() {
   return newItem;
 }
 
-// =============================== SAVE FUNCTIONS
-// ===============================
+// =============================== SAVE FUNCTIONS  ===============================
 
 // Save products to JSON file
 void saveProducts(const Product *arr, int size, const char *filename) {
@@ -571,8 +569,7 @@ void saveReceipts(const Receipt *arr, int size, const char *filename) {
        << "!\033[0m\n";
 }
 
-// =============================== LOAD FUNCTIONS
-// ===============================
+// =============================== LOAD FUNCTIONS ===============================
 
 // Load products from JSON file
 void loadProducts(const char *filename, Product *&arr, int &size,
@@ -818,7 +815,6 @@ void loadReceipts(const char *filename, Receipt *&arr, int &size,
 }
 
 // =============================== ADD FUNCTIONS ===============================
-// //
 
 // Add Product
 void addProduct() {
@@ -965,8 +961,7 @@ void addReceipt() {
   cout << "\033[32mReceipt added!\033[0m\n";
 }
 
-// =============================== EDIT FUNCTIONS
-// =============================== //
+// =============================== EDIT FUNCTIONS =============================== 
 
 // Edit Product
 void editProduct(Product *arr, int size) {
@@ -1260,8 +1255,7 @@ void editReceipt(Receipt *arr, int size) {
     cout << "\033[31mReceipt not found.\033[0m\n";
 }
 
-// =============================== SORT FUNCTIONS
-// ===============================
+// =============================== SORT FUNCTIONS ===============================
 
 // By name
 void sortProductsByName(Product *arr, int size) {
@@ -1368,8 +1362,7 @@ void sortProductsByQuantityDescending(Product *arr, int size) {
   cout << "\033[32mProduct sorted successfully!\033[0m\n";
 }
 
-// =============================== PROGRAM MENU
-// ===============================//
+// =============================== PROGRAM MENU ===============================
 
 // Main program menu loop
 void runProgramMenu() {
