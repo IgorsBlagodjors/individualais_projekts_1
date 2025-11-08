@@ -231,35 +231,27 @@ void arrayExtension(T *&arr, int &size, int &capacity, const T &element) {
 
 // Universal function to delete an item from a dynamic array
 template <typename T>
-void deleteItem(T *&arr, int &size, void (*displayFunc)(const T *, int),
-                const char *itemName) {
-  if (size == 0) {
-    cout << "\033[31mNo " << itemName << " to delete!\033[0m\n";
-    return;
-  }
+void deleteItem(T *&arr, int &size, void (*displayFunc)(const T*, int), const char *itemName) {
+    if (size == 0) {
+        cout << "\033[31mNo " << itemName << " to delete!\033[0m\n";
+        return;
+    }
 
-  displayFunc(arr, size);
+    displayFunc(arr, size);
 
-  int index;
-  cout << "Enter index of " << itemName << " to delete (1-" << size
-       << "), (0 to cancel): ";
-  cin >> index;
-  if (index == 0) {
-    cout << "\033[33mDelete cancelled.\033[0m\n";
-    return;
-  }
+    int index = indexValidator(size, "Enter index of " + string(itemName) + " to delete (1-" + to_string(size) + ", 0 to cancel): ");
 
-  if (index < 1 || index > size) {
-    cout << "\033[31mInvalid number!\033[0m\n";
-    return;
-  }
+    if (index == 0) {
+        cout << "\033[33mDelete cancelled.\033[0m\n";
+        return;
+    }
 
-  // Shift elements to remove selected
-  for (int i = index - 1; i < size - 1; ++i)
-    arr[i] = arr[i + 1];
+    for (int i = index - 1; i < size - 1; i++) {
+        arr[i] = arr[i + 1];
+    }
 
-  size--;
-  cout << "\033[32mItem deleted successfully!\033[0m\n";
+    size--;
+    cout << "\033[32mItem deleted successfully!\033[0m\n\n";
 }
 
 // Function to validate a correct date
