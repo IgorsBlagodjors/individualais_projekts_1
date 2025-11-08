@@ -1025,32 +1025,32 @@ void editProduct(Product *arr, int size) {
 // Edit Employee
 void editEmployee(Employee *arr, int size) {
   if (size == 0) {
-    cout << "\033[31mNo products to edit.\033[0m\n";
+    cout << "\033[31mNo employees to edit.\033[0m\n";
     return;
   }
 
   displayEmployees(arr, size);
 
-  int employeIndex =
+  int employeeIndex =
       indexValidator(size, "Select employee index (0 to cancel): ");
-  if (employeIndex == 0) {
+  if (employeeIndex == 0) {
     cout << "\033[33mEdit cancelled.\033[0m\n";
     return;
   }
 
-  Employee &e = arr[employeIndex - 1];
-  cout << "\n=== EDIT EMPLOYEE #" << employeIndex << ": " << e.firstName
+  Employee &e = arr[employeeIndex - 1];
+  cout << "\n=== EDIT EMPLOYEE #" << employeeIndex << ": " << e.firstName
        << " ===\n";
 
   editIntValidator(e.id, "ID");
   editStringValidator(e.firstName, 11, "name");
   editStringValidator(e.lastName, 11, "last name");
 
-  cout << "Current category: " << categoryToChar(e.department) << endl;
+  cout << "Current department: " << categoryToChar(e.department) << endl;
   cout << "Press Enter to keep current value.\n";
 
   while (true) {
-    cout << "Select new category (0-Food, 1-Clothes, 2-Electronics, 3-Books, "
+    cout << "Select new department (0-Food, 1-Clothes, 2-Electronics, 3-Books, "
             "4-HomeAndGarden): ";
     string catInput;
     getline(cin, catInput);
@@ -1065,8 +1065,8 @@ void editEmployee(Employee *arr, int size) {
         e.department = static_cast<Category>(catVal);
         break;
       } else {
-        cout << "\033[31mInvalid depaetment. Enter a number 0-4 or press Enter "
-                "to keep old value.\033[0m\n";
+        cout << "\033[31mInvalid department. Enter a number 0-4 or press "
+                "Enter to keep old value.\033[0m\n";
       }
     } catch (...) {
       cout << "\033[31mInvalid input. Enter a number 0-4 or press Enter to "
@@ -1074,13 +1074,13 @@ void editEmployee(Employee *arr, int size) {
     }
   }
 
-  cout << "\n\033[32mEmploye updated successfully!\033[0m\n";
+  cout << "\n\033[32mEmployee updated successfully!\033[0m\n";
 }
 
 // Edit Discount Card
 void editDiscountCard(DiscountCard *arr, int size) {
   if (size == 0) {
-    cout << "\033[31mNo products to edit.\033[0m\n";
+    cout << "\033[31mNo discount cards to edit.\033[0m\n";
     return;
   }
 
@@ -1097,15 +1097,15 @@ void editDiscountCard(DiscountCard *arr, int size) {
   cout << "\n=== EDIT DISCOUNT CARD #" << discountIndex << ": " << d.cardNumber
        << " ===\n";
 
-  editIntValidator(d.cardNumber, " card number");
+  editIntValidator(d.cardNumber, "card number");
   editStringValidator(d.ownerFirstName, 11, "name");
   editStringValidator(d.ownerLastName, 11, "last name");
 
-  cout << "Current category: " << cardToChar(d.type) << endl;
+  cout << "Current type: " << cardToChar(d.type) << endl;
   cout << "Press Enter to keep current value.\n";
 
   while (true) {
-    cout << "Select new type (0-Bronze, 1-Silver, 2-Gold: ";
+    cout << "Select new type (0-Bronze, 1-Silver, 2-Gold): ";
     string catInput;
     getline(cin, catInput);
 
@@ -1123,7 +1123,7 @@ void editDiscountCard(DiscountCard *arr, int size) {
                 "keep old value.\033[0m\n";
       }
     } catch (...) {
-      cout << "\033[31mInvalid input. Enter a number 0-4 or press Enter to "
+      cout << "\033[31mInvalid input. Enter a number 0-2 or press Enter to "
               "keep old value.\033[0m\n";
     }
   }
@@ -1133,7 +1133,7 @@ void editDiscountCard(DiscountCard *arr, int size) {
 // Edit Receipt
 void editReceipt(Receipt *arr, int size) {
   if (size == 0) {
-    cout << "\033[31mNo products to edit.\033[0m\n";
+    cout << "\033[31mNo receipts to edit.\033[0m\n";
     return;
   }
 
@@ -1244,9 +1244,11 @@ void editReceipt(Receipt *arr, int size) {
       // Edit discount card
       displayDiscountCards(loadedCards, loadedCardCount);
 
-      int newIndex = indexValidator(loadedCardCount, "Enter card index: ");
-      for (int i = 0; i < loadedCardCount; i++) {
-        arr[i].card = loadedCards[newIndex - 1];
+      int cardIndex = indexValidator(loadedCardCount, "Enter card index: ");
+      if (cardIndex != 0) {
+        arr[i].card = loadedCards[cardIndex - 1];
+      } else {
+        cout << "\033[33mCard update skipped.\033[0m\n";
       }
 
       cout << "\n\033[32mReceipt updated successfully!\033[0m\n";
