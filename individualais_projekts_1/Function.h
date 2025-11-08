@@ -1,11 +1,9 @@
 #pragma once
 #include <string>
 #include <fstream>
-#include "dataTypes.h" 
+#include "dataTypes.h"
 
-using namespace std;
-
-bool fileExists(const string& filename);
+bool fileExists(const std::string& filename);
 
 void saveProducts(const Product* arr, int size, const char* filename);
 void saveEmployees(const Employee* arr, int size, const char* filename);

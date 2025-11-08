@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <string>
 #include <vector>
-using namespace std;
 
 enum struct Category : int {
     Food,
@@ -37,7 +36,7 @@ inline const char* cardToChar(DiscountCardType c) {
     }
 }
 
-inline Category charToCategory(const string& s) {
+inline Category charToCategory(const std::string& s) {
     if (s == "Food") return Category::Food;
     if (s == "Clothes") return Category::Clothes;
     if (s == "Electronics") return Category::Electronics;
@@ -46,7 +45,7 @@ inline Category charToCategory(const string& s) {
     return Category::Food;
 }
 
-inline DiscountCardType charToCardType(const string& s) {
+inline DiscountCardType charToCardType(const std::string& s) {
     if (s == "Bronze") return DiscountCardType::Bronze;
     if (s == "Silver") return DiscountCardType::Silver;
     if (s == "Gold") return DiscountCardType::Gold;
@@ -92,7 +91,7 @@ struct PurchasedProduct {
 struct Receipt {
     int receiptNumber;
     DiscountCard card;
-    vector<PurchasedProduct > items;
+    std::vector<PurchasedProduct> items;
     char date[12];                
     
     // =============================== PROGRAMM CALCULATIONS ===============================

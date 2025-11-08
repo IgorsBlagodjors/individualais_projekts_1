@@ -1,7 +1,12 @@
 ﻿#include "Function.h"
-#include <regex> 
+#include <algorithm>
+#include <cctype>
+#include <cstring>
+#include <limits>
+#include <regex>
 #include <fstream>
 #include <iomanip>
+#include <cstdio>
 #include "menu.h"
 #include <iostream>
 #include "dataView.h"
@@ -9,6 +14,17 @@
 using namespace std;
 
 // =============================== HELPER FUNCTIONS ===============================
+
+namespace {
+void copyToBuffer(char* destination, size_t destinationSize, const string& value) {
+    if (destinationSize == 0) {
+        return;
+    }
+
+    std::strncpy(destination, value.c_str(), destinationSize - 1);
+    destination[destinationSize - 1] = '\0';
+}
+} // namespace
 
 // Input int validation for numbers
 static int intValidator(const string& prompt, bool allowZeroAsCancel = false) {
@@ -73,13 +89,13 @@ static void stringValidator(char* buffer, int maxLen, const string& prompt) {
         }
 
         // Check for empty string
-        if (strlen(buffer) == 0) {
+        if (std::strlen(buffer) == 0) {
             cout << "\033[31mInput cannot be empty!\033[0m\n";
             continue;
         }
 
         // Check that input is not only digits
-        bool allDigits = all_of(buffer, buffer + strlen(buffer), ::isdigit);
+        bool allDigits = std::all_of(buffer, buffer + std::strlen(buffer), ::isdigit);
         if (allDigits) {
             cout << "\033[31mInput cannot be only numbers!\033[0m\n";
             continue;
@@ -135,20 +151,20 @@ static void editStringValidator(char* buffer, int maxLen, const string& fieldNam
 
         }
 
-        if (strlen(input) == 0)
+        if (std::strlen(input) == 0)
             return;
 
-        bool allDigits = all_of(input, input + strlen(input), ::isdigit);
+        bool allDigits = std::all_of(input, input + std::strlen(input), ::isdigit);
         if (allDigits) {
             cout << "\033[31mInput cannot be only numbers!.\033[0m\n";
             continue;
 
         }
 
-        strcpy_s(buffer, maxLen, input);
+        copyToBuffer(buffer, static_cast<size_t>(maxLen), input);
         break;
     }
-  
+
 }
 
 // Input validation for int (loop until valid or Enter)
@@ -367,7 +383,7 @@ static void searchReceipts(Receipt* receipts, int count) {
 }
 
 // Check if file exists
-bool fileExists(const string& filename) {
+bool fileExists(const std::string& filename) {
     ifstream file(filename);
     return file.good();
 }
@@ -569,19 +585,19 @@ void loadProducts(const char* filename, Product*& arr, int& size, int& capacity)
         if (!inObject) continue;
 
         if (line.find("\"code\"") != string::npos) {
-            sscanf_s(line.c_str(), "    \"code\": %d,", &current.code);
+            std::sscanf(line.c_str(), "    \"code\": %d,", &current.code);
         }
         else if (line.find("\"name\"") != string::npos) {
             size_t start = line.find('"', 12) + 1;
             size_t end = line.find('"', start);
             string name = line.substr(start, end - start);
-            strcpy_s(current.name, sizeof(current.name), name.c_str());
+            copyToBuffer(current.name, sizeof(current.name), name);
         }
         else if (line.find("\"price\"") != string::npos) {
-            sscanf_s(line.c_str(), "    \"price\": %lf,", &current.price);
+            std::sscanf(line.c_str(), "    \"price\": %lf,", &current.price);
         }
         else if (line.find("\"quantityInStock\"") != string::npos) {
-            sscanf_s(line.c_str(), "    \"quantityInStock\": %d,", &current.quantityInStock);
+            std::sscanf(line.c_str(), "    \"quantityInStock\": %d,", &current.quantityInStock);
         }
         else if (line.find("\"category\"") != string::npos) {
             size_t start = line.find('"', 14) + 1;
@@ -620,19 +636,19 @@ void loadEmployees(const char* filename, Employee*& arr, int& size, int& capacit
         if (!inObject) continue;
 
         if (line.find("\"id\"") != string::npos) {
-            sscanf_s(line.c_str(), "    \"id\": %d,", &current.id);
+            std::sscanf(line.c_str(), "    \"id\": %d,", &current.id);
         }
         else if (line.find("\"firstName\"") != string::npos) {
             size_t start = line.find('"', line.find(':')) + 1;
             size_t end = line.find('"', start);
             string s = line.substr(start, end - start);
-            strncpy_s(current.firstName, sizeof(current.firstName), s.c_str(), _TRUNCATE);
+            copyToBuffer(current.firstName, sizeof(current.firstName), s);
         }
         else if (line.find("\"lastName\"") != string::npos) {
             size_t start = line.find('"', line.find(':')) + 1;
             size_t end = line.find('"', start);
             string s = line.substr(start, end - start);
-            strncpy_s(current.lastName, sizeof(current.lastName), s.c_str(), _TRUNCATE);
+            copyToBuffer(current.lastName, sizeof(current.lastName), s);
         }
         else if (line.find("\"department\"") != string::npos) {
             size_t start = line.find('"', line.find(':')) + 1;
@@ -671,19 +687,19 @@ void loadDiscountCards(const char* filename, DiscountCard*& arr, int& size, int&
         if (!inObject) continue;
 
         if (line.find("\"cardNumber\"") != string::npos) {
-            sscanf_s(line.c_str(), "    \"cardNumber\": %d,", &current.cardNumber);
+            std::sscanf(line.c_str(), "    \"cardNumber\": %d,", &current.cardNumber);
         }
         else if (line.find("\"ownerFirstName\"") != string::npos) {
             size_t start = line.find('"', line.find(':')) + 1;
             size_t end = line.find('"', start);
             string s = line.substr(start, end - start);
-            strcpy_s(current.ownerFirstName, sizeof(current.ownerFirstName), s.c_str());
+            copyToBuffer(current.ownerFirstName, sizeof(current.ownerFirstName), s);
         }
         else if (line.find("\"ownerLastName\"") != string::npos) {
             size_t start = line.find('"', line.find(':')) + 1;
             size_t end = line.find('"', start);
             string s = line.substr(start, end - start);
-            strcpy_s(current.ownerLastName, sizeof(current.ownerLastName), s.c_str());
+            copyToBuffer(current.ownerLastName, sizeof(current.ownerLastName), s);
         }
         else if (line.find("\"type\"") != string::npos) {
             size_t start = line.find('"', line.find(':')) + 1;
@@ -732,17 +748,17 @@ void loadReceipts(
         if (!inReceipt) continue;
 
         if (line.find("\"receiptNumber\"") != string::npos) {
-            sscanf_s(line.c_str(), "    \"receiptNumber\": %d,", &current.receiptNumber);
+            std::sscanf(line.c_str(), "    \"receiptNumber\": %d,", &current.receiptNumber);
         }
         else if (line.find("\"date\"") != string::npos) {
             size_t start = line.find('"', line.find(':')) + 1;
             size_t end = line.find('"', start);
             string s = line.substr(start, end - start);
-            strcpy_s(current.date, sizeof(current.date), s.c_str());
+            copyToBuffer(current.date, sizeof(current.date), s);
         }
         else if (line.find("\"discountCard\"") != string::npos) {
             int cardNum;
-            sscanf_s(line.c_str(), "    \"discountCard\": %d,", &cardNum);
+            std::sscanf(line.c_str(), "    \"discountCard\": %d,", &cardNum);
             for (int i = 0; i < cardSize; ++i) {
                 if (cards[i].cardNumber == cardNum) {
                     current.card = cards[i];
@@ -778,7 +794,7 @@ void loadReceipts(
                     }
                 }
 
-                sscanf_s(qtyLine.c_str(), "        \"quantity\": %d,", &item.quantity);
+                std::sscanf(qtyLine.c_str(), "        \"quantity\": %d,", &item.quantity);
                 current.items.push_back(item);
             }
         }
@@ -882,7 +898,7 @@ void addReceipt() {
         getline(cin, input);
         string checkedDate = dateValidCheck(input);
         if (!checkedDate.empty()) {
-            strcpy_s(receipt.date, checkedDate.c_str());
+            copyToBuffer(receipt.date, sizeof(receipt.date), checkedDate);
             break;
         }
         cout << "Please try again.\n";
@@ -1122,7 +1138,7 @@ void editReceipt(Receipt* arr, int size) {
                 if (input.empty()) break;
                 string checkedDate = dateValidCheck(input);
                 if (!checkedDate.empty()) {
-                    strcpy_s(arr[i].date, checkedDate.c_str());
+                    copyToBuffer(arr[i].date, sizeof(arr[i].date), checkedDate);
                     break;
                 }
             }

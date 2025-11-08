@@ -24,7 +24,7 @@ int main() {
     loadProducts("products.json", loadedProducts, loadedProductCount, loadedProductCapacity);
     loadEmployees("employees.json", loadedEmployees, loadedEmployeeCount, loadedEmployeeCapacity);
     loadDiscountCards("discountCards.json", loadedCards, loadedCardCount, loadedCardCapacity);
-    loadReceipts("receipts.json", loadedReceipts, loadedReceiptCount,
+    loadReceipts("Receipts.json", loadedReceipts, loadedReceiptCount,
         loadedProducts, loadedProductCount,
         loadedCards, loadedCardCount,
         loadedReceiptCapacity);
