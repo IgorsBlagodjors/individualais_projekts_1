@@ -239,7 +239,7 @@ void deleteItem(T*& arr, int& size, void (*displayFunc)(const T*, int), const ch
     displayFunc(arr, size);
 
     int index;
-    cout << "Enter number of " << itemName << " to delete (1-" << size << "), (0 to cancel): ";
+    cout << "Enter index of " << itemName << " to delete (1-" << size << "), (0 to cancel): ";
     cin >> index;
 
     if (index == 0) {

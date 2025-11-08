@@ -113,6 +113,7 @@ void displayReceipts(const Receipt* arr, int size) {
     for (int i = 0; i < size; i++) {
         cout << "\033[32m================ RECEIPT #" << arr[i].receiptNumber
             << " =================\033[0m" << endl;
+        cout << "\033[33mINDEX: " << i + 1 << "\033[0m" << endl;
         cout << "Date: " << arr[i].date << endl;
         cout << "-----------------------------------------------" << endl;
 
