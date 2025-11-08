@@ -240,10 +240,16 @@ void deleteItem(T *&arr, int &size, void (*displayFunc)(const T *, int),
 
   displayFunc(arr, size);
 
+<<<<<<< HEAD
   int index;
   cout << "Enter index of " << itemName << " to delete (1-" << size
        << "), (0 to cancel): ";
   cin >> index;
+=======
+    int index;
+    cout << "Enter index of " << itemName << " to delete (1-" << size << "), (0 to cancel): ";
+    cin >> index;
+>>>>>>> fc65c16 (update)
 
   if (index == 0) {
     cout << "\033[33mDelete cancelled.\033[0m\n";
