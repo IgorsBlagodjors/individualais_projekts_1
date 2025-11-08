@@ -3,9 +3,8 @@
 #include <fstream>
 #include "dataTypes.h" 
 
-using namespace std;
 
-bool fileExists(const string& filename);
+bool fileExists(const std::string& filename);
 
 void saveProducts(const Product* arr, int size, const char* filename);
 void saveEmployees(const Employee* arr, int size, const char* filename);
@@ -18,7 +17,7 @@ void loadDiscountCards(const char* filename, DiscountCard*& arr, int& size, int&
 void loadReceipts(const char* filename, Receipt*& arr, int& size,
     Product* products, int productSize, DiscountCard* cards, int cardSize,
     int& capacity);
-void editDiscountCard(DiscountCard* arr, int size);
+
 void addProduct();
 void addEmployee();
 void addDiscountCard();
@@ -26,6 +25,7 @@ void addReceipt();
 
 void editProduct(Product* arr, int size);
 void editEmployee(Employee* arr, int size);
+void editDiscountCard(DiscountCard* arr, int size);
 void editReceipt(Receipt* arr, int size);
 
 void sortProductsByName(Product* arr, int size);

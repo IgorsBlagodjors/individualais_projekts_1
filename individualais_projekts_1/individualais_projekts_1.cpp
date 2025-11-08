@@ -16,8 +16,8 @@ int main() {
     if (!fileExists("discountCards.json")) {
         saveDiscountCards(initialCards, 4, "discountCards.json");
     }
-    if (!fileExists("Receipts.json")) {
-        saveReceipts(defaultReceipts, 4, "Receipts.json");
+    if (!fileExists("receipts.json")) {
+        saveReceipts(defaultReceipts, 4, "receipts.json");
     }
   
 	// Load data from files
