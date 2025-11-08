@@ -246,6 +246,7 @@ void deleteItem(T *&arr, int &size, void (*displayFunc)(const T*, int), const ch
         return;
     }
 
+    // Shift elements to remove selected
     for (int i = index - 1; i < size - 1; i++) {
         arr[i] = arr[i + 1];
     }
