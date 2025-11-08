@@ -907,7 +907,7 @@ void addReceipt() {
  
     // Select discount card
     displayDiscountCards(loadedCards, loadedCardCount);
-    cout << "\nSelect discount card: ";
+    cout << "\nSelect discount card index: ";
 
     int cardIndex;
     while (!(cin >> cardIndex) || cardIndex < 1 || cardIndex > loadedCardCount) {
@@ -1475,9 +1475,7 @@ void runProgramMenu() {
             } while (removeChoice != 5);
             break;
         }
-
         case 5: searchReceipts(loadedReceipts, loadedReceiptCount); break;
-
         case 6: { 
             // Sort Data
             int sortChoice;
