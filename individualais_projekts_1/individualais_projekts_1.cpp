@@ -21,12 +21,9 @@ int main() {
   }
 
   // Load data from files
-  loadProducts("products.json", loadedProducts, loadedProductCount,
-               loadedProductCapacity);
-  loadEmployees("employees.json", loadedEmployees, loadedEmployeeCount,
-                loadedEmployeeCapacity);
-  loadDiscountCards("discountCards.json", loadedCards, loadedCardCount,
-                    loadedCardCapacity);
+  loadProducts("products.json", loadedProducts, loadedProductCount, loadedProductCapacity);
+  loadEmployees("employees.json", loadedEmployees, loadedEmployeeCount, loadedEmployeeCapacity);
+  loadDiscountCards("discountCards.json", loadedCards, loadedCardCount, loadedCardCapacity);
   loadReceipts("receipts.json", loadedReceipts, loadedReceiptCount,
                loadedProducts, loadedProductCount, loadedCards, loadedCardCount,
                loadedReceiptCapacity);
