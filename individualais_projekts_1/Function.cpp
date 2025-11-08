@@ -1264,15 +1264,15 @@ void sortProductsByName(Product *arr, int size) {
     return;
   }
 
-  for (int i = 0; i < size - 1; i++) {
-    for (int j = 0; j < size - i - 1; j++) {
-      if (string(arr[j].name) > string(arr[j + 1].name)) {
-        Product temp = arr[j];
-        arr[j] = arr[j + 1];
-        arr[j + 1] = temp;
-      }
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (string(arr[j].name) > string(arr[j + 1].name)) {
+                Product temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
     }
-  }
 
   displayProducts(loadedProducts, loadedProductCount);
   cout << "\033[32mProduct sorted successfully!\033[0m\n";
