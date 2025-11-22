@@ -451,7 +451,6 @@ static void deleteDiscountCard() {
                 sizeof(loadedReceipts[i].card.ownerLastName),
                 "REMOVED");
             loadedReceipts[i].card.type = DiscountCardType::none;
-
         }
     }
 }
@@ -491,7 +490,6 @@ static void deleteProduct() {
             }
         }
     }
-
     cout << "\033[32mProduct deleted successfully!\033[0m\n" << endl;
 }
 
@@ -1098,9 +1096,7 @@ void editProduct(Product *arr, int size) {
               purchased.product = p;
           }
       }
-
   }
-
   cout << "\n\033[32mProduct updated successfully!\033[0m\n";
 }
 
@@ -1208,10 +1204,9 @@ void editDiscountCard(DiscountCard *arr, int size) {
     } catch (...) {
       cout << "\033[31mInvalid input. Enter a number 0-2 or press Enter to "
               "keep old value.\033[0m\n";
-
     }
-    
   }
+
   for (int i = 0; i < loadedReceiptCount; ++i) {
       if (loadedReceipts[i].card.cardNumber == oldDiscount.cardNumber) {
           loadedReceipts[i].card = d;
