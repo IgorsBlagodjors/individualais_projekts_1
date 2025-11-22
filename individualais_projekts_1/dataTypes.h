@@ -5,7 +5,7 @@ using namespace std;
 
 enum struct Category : int { Food, Clothes, Electronics, Books, HomeAndGarden };
 
-enum struct DiscountCardType : int { Bronze, Silver, Gold };
+enum struct DiscountCardType : int { Bronze, Silver, Gold, none };
 
 inline const char *categoryToChar(Category c) {
   switch (c) {

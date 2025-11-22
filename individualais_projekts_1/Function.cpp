@@ -229,32 +229,6 @@ void arrayExtension(T *&arr, int &size, int &capacity, const T &element) {
   arr[size++] = element;
 }
 
-// Universal function to delete an item from a dynamic array
-template <typename T>
-void deleteItem(T *&arr, int &size, void (*displayFunc)(const T*, int), const char *itemName) {
-    if (size == 0) {
-        cout << "\033[31mNo " << itemName << " to delete!\033[0m\n";
-        return;
-    }
-
-    displayFunc(arr, size);
-
-    int index = indexValidator(size, "Enter index of " + string(itemName) + " to delete (1-" + to_string(size) + ", 0 to cancel): ");
-
-    if (index == 0) {
-        cout << "\033[33mDelete cancelled.\033[0m\n";
-        return;
-    }
-
-    // Shift elements to remove selected
-    for (int i = index - 1; i < size - 1; i++) {
-        arr[i] = arr[i + 1];
-    }
-
-    size--;
-    cout << "\033[32mItem deleted successfully!\033[0m\n\n";
-}
-
 // Function to validate a correct date
 static string dateValidCheck(const string &dateInput) {
   string date = dateInput;
@@ -436,6 +410,115 @@ static PurchasedProduct inputNewProduct() {
   }
 
   return newItem;
+}
+
+// =============================== REMOVE FUNCTIONS  ===============================
+
+// Remove discount card
+static void deleteDiscountCard() {
+    if (loadedCardCount == 0) {
+        cout << "\033[31mNo products to delete!\033[0m\n";
+        return;
+    }
+
+    displayDiscountCards(loadedCards, loadedCardCount);
+
+    int index = indexValidator(
+        loadedCardCount,
+        "Enter index of discount card  to delete (1-" +
+        to_string(loadedCardCount) + ", 0 to cancel): "
+    );
+
+    if (index == 0) {
+        cout << "\033[33mDelete cancelled.\033[0m\n";
+        return;
+    }
+
+    DiscountCard removedDiscountCard = loadedCards[index - 1];
+    for (int i = index - 1; i < loadedCardCount - 1; ++i) {
+        loadedCards[i] = loadedCards[i + 1];
+    }
+    --loadedCardCount;
+
+    for (int i = 0; i < loadedReceiptCount; ++i) {
+        if (loadedReceipts[i].card.cardNumber == removedDiscountCard.cardNumber) {
+            loadedReceipts[i].card.cardNumber = -1;
+            strcpy_s(loadedReceipts[i].card.ownerFirstName,
+                sizeof(loadedReceipts[i].card.ownerFirstName),
+                "REMOVED");
+
+            strcpy_s(loadedReceipts[i].card.ownerLastName,
+                sizeof(loadedReceipts[i].card.ownerLastName),
+                "REMOVED");
+            loadedReceipts[i].card.type = DiscountCardType::none;
+
+        }
+    }
+}
+
+// Remove product
+static void deleteProduct() {
+    if (loadedProductCount == 0) {
+        cout << "\033[31mNo products to delete!\033[0m\n";
+        return;
+    }
+
+    displayProducts(loadedProducts, loadedProductCount);
+
+    int index = indexValidator(
+        loadedProductCount,
+        "Enter index of product to delete (1-" +
+        to_string(loadedProductCount) + ", 0 to cancel): "
+    );
+
+    if (index == 0) {
+        cout << "\033[33mDelete cancelled.\033[0m\n";
+        return;
+    }
+
+    Product removedProduct = loadedProducts[index - 1];
+    for (int i = index - 1; i < loadedProductCount - 1; ++i) {
+        loadedProducts[i] = loadedProducts[i + 1];
+    }
+    --loadedProductCount;
+
+    for (int i = 0; i < loadedReceiptCount; ++i) {
+        auto& items = loadedReceipts[i].items;
+
+        for (int j = items.size() - 1; j >= 0; --j) {
+            if (items[j].product.code == removedProduct.code) {
+                items.erase(items.begin() + j);
+            }
+        }
+    }
+
+    cout << "\033[32mProduct deleted successfully!\033[0m\n" << endl;
+}
+
+// Universal function to delete an item from a dynamic array
+template <typename T>
+void deleteItem(T*& arr, int& size, void (*displayFunc)(const T*, int), const char* itemName) {
+    if (size == 0) {
+        cout << "\033[31mNo " << itemName << " to delete!\033[0m\n";
+        return;
+    }
+
+    displayFunc(arr, size);
+
+    int index = indexValidator(size, "Enter index of " + string(itemName) + " to delete (1-" + to_string(size) + ", 0 to cancel): ");
+
+    if (index == 0) {
+        cout << "\033[33mDelete cancelled.\033[0m\n";
+        return;
+    }
+
+    // Shift elements to remove selected
+    for (int i = index - 1; i < size - 1; i++) {
+        arr[i] = arr[i + 1];
+    }
+
+    size--;
+    cout << "\033[32mItem deleted successfully!\033[0m\n\n";
 }
 
 // =============================== SAVE FUNCTIONS  ===============================
@@ -971,6 +1054,7 @@ void editProduct(Product *arr, int size) {
   }
 
   Product &p = arr[prodIndex - 1];
+  Product oldProduct = p;
   cout << "\n=== EDIT PRODUCT #" << prodIndex << ": " << p.name << " ===\n";
 
   editIntValidator(p.code, "code");
@@ -1004,6 +1088,17 @@ void editProduct(Product *arr, int size) {
       cout << "\033[31mInvalid input. Enter a number 0-4 or press Enter to "
               "keep old value.\033[0m\n";
     }
+  }
+
+  for (int i = 0; i < loadedReceiptCount; ++i) {
+      auto& items = loadedReceipts[i].items;
+
+      for (auto& purchased : items) {
+          if (purchased.product.code == oldProduct.code) {
+              purchased.product = p;
+          }
+      }
+
   }
 
   cout << "\n\033[32mProduct updated successfully!\033[0m\n";
@@ -1081,6 +1176,7 @@ void editDiscountCard(DiscountCard *arr, int size) {
   }
 
   DiscountCard &d = arr[discountIndex - 1];
+  DiscountCard oldDiscount = d;
   cout << "\n=== EDIT DISCOUNT CARD #" << discountIndex << ": " << d.cardNumber
        << " ===\n";
 
@@ -1112,7 +1208,14 @@ void editDiscountCard(DiscountCard *arr, int size) {
     } catch (...) {
       cout << "\033[31mInvalid input. Enter a number 0-2 or press Enter to "
               "keep old value.\033[0m\n";
+
     }
+    
+  }
+  for (int i = 0; i < loadedReceiptCount; ++i) {
+      if (loadedReceipts[i].card.cardNumber == oldDiscount.cardNumber) {
+          loadedReceipts[i].card = d;
+      }
   }
   cout << "\n\033[32mDiscount card updated successfully!\033[0m\n";
 }
@@ -1519,11 +1622,7 @@ void runProgramMenu() {
 
         switch (removeChoice) {
         case 1:
-          if (loadedProductCount > 0)
-            deleteItem(loadedProducts, loadedProductCount, displayProducts,
-                       "product");
-          else
-            cout << "\033[1;31m\nNo products available!\033[0m\n";
+            deleteProduct();
           break;
         case 2:
           if (loadedEmployeeCount > 0)
@@ -1533,11 +1632,7 @@ void runProgramMenu() {
             cout << "\033[1;31m\nNo employees available!\033[0m\n";
           break;
         case 3:
-          if (loadedCardCount > 0)
-            deleteItem(loadedCards, loadedCardCount, displayDiscountCards,
-                       "discount card");
-          else
-            cout << "\033[1;31m\nNo discount cards available!\033[0m\n";
+            deleteDiscountCard();
           break;
         case 4:
           if (loadedReceiptCount > 0)
