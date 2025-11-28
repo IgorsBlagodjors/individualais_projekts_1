@@ -489,7 +489,16 @@ static void deleteProduct() {
                 items.erase(items.begin() + j);
             }
         }
+
+        if (items.empty()) {
+            for (int k = i; k < loadedReceiptCount - 1; ++k) {
+                loadedReceipts[k] = loadedReceipts[k + 1];
+            }
+            --loadedReceiptCount;
+            --i;
+        }
     }
+
     cout << "\033[32mProduct deleted successfully!\033[0m\n" << endl;
 }
 
